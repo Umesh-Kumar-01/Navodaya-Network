@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}JNV Family: Login{% endblock title %}
+
+{% block content %}
+<!-- Section: Design Block -->
+<div id="warning-messages">
+  {% if form.errors %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    User Not Found! Please Check Your inputs again.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+{% endif %}
+  {% if next %}
+  {% if user.is_authenticated %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+    {% else %}
+      <p>Please login to see this page.</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+  {% endif %}
+</div>
+
+<section class="background-radial-gradient overflow-hidden">
+  <style>
+    .background-radial-gradient {
+      background-color: hsl(218, 41%, 15%);
+      background-image: radial-gradient(650px circle at 0% 0%,
+          hsl(218, 41%, 35%) 15%,
+          hsl(218, 41%, 30%) 35%,
+          hsl(218, 41%, 20%) 75%,
+          hsl(218, 41%, 19%) 80%,
+          transparent 100%),
+        radial-gradient(1250px circle at 100% 100%,
+          hsl(218, 41%, 45%) 15%,
+          hsl(218, 41%, 30%) 35%,
+          hsl(218, 41%, 20%) 75%,
+          hsl(218, 41%, 19%) 80%,
+          transparent 100%);
+    }
+
+    #radius-shape-1 {
+      height: 220px;
+      width: 220px;
+      top: -60px;
+      left: -130px;
+      background: radial-gradient(#44006b, #ad1fff);
+      overflow: hidden;
+    }
+
+    #radius-shape-2 {
+      border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+      bottom: -60px;
+      right: -110px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(#44006b, #ad1fff);
+      overflow: hidden;
+    }
+
+    .bg-glass {
+      background-color: hsla(0, 0%, 100%, 0.9) !important;
+      backdrop-filter: saturate(200%) blur(25px);
+    }
+  </style>
+
+  <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+    <div class="row gx-lg-5 align-items-center mb-5">
+      <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+        <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+          प्रज्ञान ब्रह्म<br />
+          <span style="color: hsl(218, 81%, 75%)">Knowledge is the Supreme Reality</span>
+        </h1>
+        <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
+          {% comment %} Write something {% endcomment %}
+        </p>
+      </div>
+
+      <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+        <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+        <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+        <div class="card bg-glass">
+          <div class="card-body px-4 py-5 px-md-5">
+            <form action="{% url 'login' %}" method="POST">
+              {% csrf_token %}
+              <div class="mb-4">
+                <!-- Email input -->
+                <div class="form-outline">
+                  <input type="text" id="{{form.username.id}}" class="form-control" name="{{form.username.html_name}}" required>
+                  <label class="form-label" for="{{form.username.id}}">{{form.username.label}}</label>
+                </div>
+              </div>
+              <div class="mb-4">
+                <!-- Password input -->
+                <div class="form-outline">
+                  <input type="password" id="{{form.password.id}}" class="form-control" name="{{form.password.html_name}}" required>
+                  <label class="form-label" for="{{form.password.id}}">{{form.password.label}}</label>
+                </div>
+              </div>
+              <div class="mb-4">
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+              </div>
+              <input type="hidden" name="next" value="{{ next }}">
+            </form>
+            <div class="text-center">
+              <p class="mb-2">Don't have an account?</p>
+              <form action="{% url 'signup' %}" method="GET">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning">Sign Up Here</button>
+              </form>
+              <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+.bg-glass {
+  background-color: hsla(0, 0%, 100%, 0.9) !important;
+  backdrop-filter: saturate(200%) blur(25px);
+  /* Add the following lines */
+  position: relative;
+  z-index: 1;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+</style>
+<!-- Section: Design Block -->
+{% endblock%}

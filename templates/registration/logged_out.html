@@ -1,0 +1,6 @@
+{% extends "message.html" %}
+
+{% block message %}
+  <h4>Logged out!</h4>
+  <a href="{% url 'login'%}">Click here to login again.</a>
+{% endblock %}

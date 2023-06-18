@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Left Section -->
+    <div class="col-lg-4 col-md-12">
+      <div class="stacked-containers">
+        <!-- Add your stacked containers here -->
+        <div class="container-item" onclick="openContainer(1)">Container 1</div>
+        <div class="container-item" onclick="openContainer(2)">Container 2</div>
+        <div class="container-item" onclick="openContainer(3)">Container 3</div>
+      </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="col-lg-8 col-md-12">
+      <div id="display-container" class="selected-container">
+        <!-- Container content will be displayed here -->
+        <h2>Click on a container to display its content</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openContainer(containerNumber) {
+    // Get the container content based on the container number
+    var containerContent = getContainerContent(containerNumber);
+
+    // Update the display-container with the container content
+    var displayContainer = document.getElementById("display-container");
+    displayContainer.innerHTML = containerContent;
+  }
+
+  function getContainerContent(containerNumber) {
+    // Replace this function with your own logic to fetch container content
+    // based on the container number
+    // Example:
+    if (containerNumber === 1) {
+      return "<h2>Container 1 Content</h2><p>This is the content of Container 1</p>";
+    } else if (containerNumber === 2) {
+      return "<h2>Container 2 Content</h2><p>This is the content of Container 2</p>";
+    } else if (containerNumber === 3) {
+      return "<h2>Container 3 Content</h2><p>This is the content of Container 3</p>";
+    }
+  }
+</script>
+<style>
+    .stacked-containers {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .container-item {
+        background-color: #f1f1f1;
+        padding: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+      }
+      
+      .selected-container {
+        background-color: #ffffff;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        min-height: 200px;
+      }
+      
+      @media (max-width: 767px) {
+        /* Adjust the layout for smaller screens */
+        .col-lg-4 {
+          order: 2;
+        }
+      
+        .col-lg-8 {
+          order: 1;
+        }
+      }
+      
+</style>
+{% endblock %}
