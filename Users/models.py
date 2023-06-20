@@ -18,11 +18,11 @@ class UserCard(models.Model):
         SHILLONG = 'SH',_('Shillong')
     
     ROLE_CHOICES = (
-        ('teacher', 'Teacher'),
-        ('alumni', 'Alumnus/Alumna'),
-        ('worker', 'Worker'),
-        ('student', 'Student'),
-        ('office', 'Office Member'),
+        ('T', 'Teacher'),
+        ('A', 'Alumnus/Alumna'),
+        ('W', 'Worker'),
+        ('S', 'Student'),
+        ('O', 'Office Member'),
     )
     
     
@@ -33,7 +33,7 @@ class UserCard(models.Model):
     jnv_name = models.CharField(max_length = 50,choices=[(w,"Jawahar Navodaya Vidyalaya, "+w) for y in JNV_MAP_LIST.values() for w in y])
     
     verified = models.BooleanField(default=False)
-    role = models.CharField(max_length=10,choices=ROLE_CHOICES)
+    role = models.CharField(max_length=1,choices=ROLE_CHOICES)
     year = models.PositiveIntegerField(blank=True,null=True)
     HomeTown = models.CharField(max_length=300,blank=True,null=True)
     

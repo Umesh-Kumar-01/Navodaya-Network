@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import SignUpForm
 from mysite.constants import JNV_MAP_LIST
+from django.db.models import Q
+from django.core.paginator import Paginator
 
 # Create your views here.
 def index(request):
@@ -35,7 +37,36 @@ def signup(request):
 
 @login_required
 def search(request):
-    return render(request,'search.html')
+    fname = request.GET.get('fname')
+    lname = request.GET.get('lname')
+    username = request.GET.get('username')
+    jnv = request.GET.get('jnv')
+    role = request.GET.get('role')
+    year = request.GET.get('year')
+    query = Q()
+
+    if fname is not None:
+        query &= Q(user__first_name__icontains=fname)
+
+    if lname is not None:
+        query &= Q(user__last_name__icontains=lname)
+
+    if username is not None:
+        query &= Q(user__username__icontains=username)
+
+    if jnv is not None:
+        query &= Q(jnv_name__icontains=jnv)
+
+    if role is not None and role != '':
+        query &= Q(role=role)
+
+    if year is not None and year != '':
+        query &= Q(year=year)
+    context = UserCard.objects.filter(query)
+    paginator = Paginator(context, 50)  # Change the number per page as needed
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request,'search.html',{'context':page_obj})
 
 @login_required
 def notification(request):

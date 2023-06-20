@@ -73,63 +73,94 @@
         
         <div class="form-container">
           <div class="search-form mb-1">
-            <form method="POST">
-              {% csrf_token %}
+            <form action="" request="GET">
+              {% comment %} {% csrf_token %} {% endcomment %}
               <div class="row">
                 <div class="col-md-2">
-                  <input type="text" class="form-control mb-3" placeholder="Location">
+                  {% comment %} <label for="fname">First Name</label> {% endcomment %}
+                  <input type="text" class="form-control mb-3" id="name" name="fname" placeholder="First Name">
                 </div>
                 <div class="col-md-2">
-                  <input type="text" class="form-control mb-3" placeholder="Profession">
+                  {% comment %} <label for="lname">Last Name</label> {% endcomment %}
+                  <input type="text" class="form-control mb-3" id="name" name="lname" placeholder="Last Name">
                 </div>
                 <div class="col-md-2">
-                  <input type="text" class="form-control mb-3" placeholder="JNV">
+                  {% comment %} <label for="username">Username</label> {% endcomment %}
+                  <input type="text" class="form-control mb-3" id="username" name="username" placeholder="Username">
                 </div>
                 <div class="col-md-2">
-                  <input type="text" class="form-control mb-3" placeholder="Passing Year">
+                  {% comment %} <label for="jnv">JNV</label> {% endcomment %}
+                  <input type="text" class="form-control mb-3" id="jnv" name="jnv" placeholder="JNV">
                 </div>
                 <div class="col-md-2">
-                  <input type="text" class="form-control mb-3" placeholder="Joining Year">
+                  {% comment %} <label for="role">Role</label> {% endcomment %}
+                  <select type="text" class="form-control mb-3" id="role" name="role">
+                    <option value = ''>None</option>
+                    <option value = 'S'>Student</option>
+                    <option value = 'A'>Alumini</option>
+                    <option value = 'T'>Teacher</option>
+                    <option value = 'W'>Workers</option>
+                    <option value = 'O'>Office Members</option>
+                  </select>
                 </div>
                 <div class="col-md-2">
-                  <input type="text" class="form-control mb-3" placeholder="Name">
+                  {% comment %} <label for="passing-year">Batch</label> {% endcomment %}
+                  <input type="text" class="form-control mb-3" id="passing-year" name="year" placeholder="Batch Year">
                 </div>
                 <div class="col-md-2">
-                  <input type="text" class="form-control mb-3" placeholder="Username">
-                </div>
-                <div class="col-md-2">
-                  <button type="button" class="btn btn-primary">Filter</button>
+                  <button type="submit" class="btn btn-primary">Filter</button>
                 </div>
               </div>
             </form>
+            <p>Note:- Here for students and Alumini Batch Year means passing year and for Others it will joinig year at Navodaya</p>
           </div>
 
-          <div class="profile-card">
-            <div class="profile-img">
-              <i class="fas fa-user"></i>
+          <div class="profile-cards">
+            {% for user_card in context %}
+            <div class="profile-card">
+              <div class="profile-img">
+                <i class="fas fa-user"></i>
+              </div>
+              <h4 class="profile-name">{{ user_card.user.get_fname }} {{ user_card.user.get_full_name }}
+                {% if user_card.verified %}
+                  <i class="fas fa-check-circle" style="color: green;"></i>
+                {% else %}
+                  <i class="fas fa-times-circle" style="color: red;"></i>
+                {% endif %}
+              </h4>
+              <p class="profile-info">Username: {{ user_card.user.username }}</p>
+              <p class="profile-info">JNV: {{ user_card.jnv_name }}</p>
+              <p class="profile-info">Batch Year: {{ user_card.year }}</p>
+              <p class="profile-info">Verified: {{ user_card.verified }}</p>
             </div>
-            <h4 class="profile-name">John Doe</h4>
-            <p class="profile-info">Location: Chicago</p>
-            <p class="profile-info">Profession: Developer</p>
-            <p class="profile-info">JNV: XYZ School</p>
-            <p class="profile-info">Passing Year: 2010</p>
-            <p class="profile-info">Joining Year: 2015</p>
-            <p class="profile-info">Name: John Doe</p>
-            <p class="profile-info">Username: johndoe</p>
-          </div>
-
-          <div class="profile-card">
-            <div class="profile-img">
-              <i class="fas fa-user"></i>
+            
+            {% endfor %}
+            <div class="pagination">
+              <span class="step-links">
+                {% if page_obj.has_previous %}
+                  <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+            
+                <span class="current-page">{{ page_obj.number }}</span>
+            
+                {% if page_obj.has_next %}
+                  <a href="?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+              </span>
+               {% comment %} Showing links if search contains more than one result {% endcomment %}
+            </div><div class="pagination">
+              <span class="step-links">
+                {% if page_obj.has_previous %}
+                  <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+            
+                <span class="current-page">{{ page_obj.number }}</span>
+            
+                {% if page_obj.has_next %}
+                  <a href="?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+              </span>
             </div>
-            <h4 class="profile-name">Jane Smith</h4>
-            <p class="profile-info">Location: New York</p>
-            <p class="profile-info">Profession: Designer</p>
-            <p class="profile-info">JNV: ABC School</p>
-            <p class="profile-info">Passing Year: 2012</p>
-            <p class="profile-info">Joining Year: 2017</p>
-            <p class="profile-info">Name: Jane Smith</p>
-            <p class="profile-info">Username: janesmith</p>
           </div>
 
           <!-- Add more profile cards here -->
