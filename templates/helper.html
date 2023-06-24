@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% block title %}Helper Page{% endblock %}
 
 {% block content %}
@@ -19,18 +19,10 @@
                 {% csrf_token %}
                 <div class="row">
                   <div class="col-md-5">
-                    <input
-                      type="text"
-                      class="form-control mb-3"
-                      placeholder="Location"
-                    />
+                    <input type="text" class="form-control mb-3" placeholder="Location" />
                   </div>
                   <div class="col-md-5">
-                    <input
-                      type="text"
-                      class="form-control mb-3"
-                      placeholder="Profession"
-                    />
+                    <input type="text" class="form-control mb-3" placeholder="Profession" />
                   </div>
                   <div class="col-md-2">
                     <button type="button" class="btn btn-primary">
@@ -40,138 +32,401 @@
                 </div>
               </form>
             </div>
-          </div>
-        </div>
-
-        <div class="card mb-2" style="border-radius: 15px">
-          <div class="card-body p-4">
-            <h3 class="mb-3">Program Title 1</h3>
-            <div class="description mb-3">
-              <p>Description of Program Title 1</p>
-            </div>
-            <p class="small mb-0">
-              <i class="far fa-star fa-lg"></i>
-              <span class="mx-2">|</span> Created by
-              <strong>MDBootstrap</strong> on 11 April, 2021
-            </p>
-            <hr class="my-4" />
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <span class="ms-3 me-2"
-                  ><i class="fas fa-map-marker-alt"></i> Garbage Location</span
-                >
-                <span class="ms-3 me-2"
-                  ><i class="fas fa-user-tie"></i> Garbage Profession</span
-                >
-              </div>
-              <div>
-                <button type="button" class="btn btn-info btn-sm">
-                  <i class="fas fa-info-circle"></i> View
-                </button>
-                <button type="button" class="btn btn-danger btn-sm">
-                  <i class="fas fa-trash-alt"></i> Delete
-                </button>
-                <button type="button" class="btn btn-success btn-sm">
-                  <i class="fas fa-check-circle"></i> Accept
-                </button>
-                <button type="button" class="btn btn-warning btn-sm">
-                  <i class="fas fa-exclamation-circle"></i> Refer
-                </button>
+            <div class="row">
+              <div id="navbar" class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+                <div class="navbar-nav">
+                  <a id="urgentNav" class="nav-item nav-link active" href="#urgentContent">Urgent</a>
+                  <a id="highPriorityNav" class="nav-item nav-link" href="#highPriorityContent">High Priority</a>
+                  <a id="normalNav" class="nav-item nav-link" href="#normalContent">Normal</a>
+                  <a id="requestsNav" class="nav-item nav-link" href="#requestsContent">Your Requests</a>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div id="contentDiv">
+          <div id="urgentContent" class="content-section">
+            <!-- Content for Urgent -->
+            {% for help in context.Urgent %}
+            <div class="card mb-2" style="border-radius: 15px">
+              <div class="card-body p-4">
+                <h3 class="mb-3">{{help.title}}</h3>
+                <div class="description mb-3">
+                  <p>{{help.body}}</p>
+                </div>
+                <p class="small mb-0">
+                  <i class="far fa-star fa-lg"></i>
+                  <span class="mx-2">|</span> Created by
+                  <strong>@{{help.created_by.username}}</strong> on {{ help.created_at|date:"d M, Y" }}
+                </p>
+                <hr class="my-4" />
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <span class="ms-3 me-2"><i class="fas fa-map-marker-alt"></i>Location:{{help.location}}</span>
+                    <span class="ms-3 me-2"><i class="fas fa-user-tie"></i>Profession: {{help.profession}}</span>
+                  </div>
+                  <div>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                      data-bs-target="#viewModal">
+                      <i class="fas fa-info-circle"></i> View
+                    </button>
 
-        <!-- Add more card objects here -->
+                    <button type="button" class="btn btn-danger btn-sm">
+                      <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm">
+                      <i class="fas fa-check-circle"></i> Accept
+                    </button>
+                    <button type="button" class="btn btn-warning btn-sm">
+                      <i class="fas fa-exclamation-circle"></i> Refer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
 
-        {% comment %}
-        <div class="card mb-4" style="border-radius: 15px">
-          <div class="card-body p-4">
-            <h3 class="mb-3">Program Title 3</h3>
-            <div class="description mb-3">
-              <p>Description of Program Title 3</p>
-            </div>
-            <p class="small mb-0">
-              <i class="far fa-star fa-lg"></i>
-              <span class="mx-2">|</span> Created by
-              <strong>MDBootstrap</strong> on 11 April, 2021
-            </p>
-            <hr class="my-4" />
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <span class="ms-3 me-2"
-                  ><i class="fas fa-map-marker-alt"></i> Garbage Location</span
-                >
-                <span class="ms-3 me-2"
-                  ><i class="fas fa-user-tie"></i> Garbage Profession</span
-                >
+          <div id="highPriorityContent" class="content-section" style="display: none;">
+            <!-- Content for High Priority -->
+            {% for help in context.High_priority %}
+            <div class="card mb-2" style="border-radius: 15px">
+              <div class="card-body p-4">
+                <h3 class="mb-3">{{help.title}}</h3>
+                <div class="description mb-3">
+                  <p>{{help.body}}</p>
+                </div>
+                <p class="small mb-0">
+                  <i class="far fa-star fa-lg"></i>
+                  <span class="mx-2">|</span> Created by
+                  <strong>@{{help.created_by.username}}</strong> on {{ help.created_at|date:"d M, Y" }}
+                </p>
+                <hr class="my-4" />
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <span class="ms-3 me-2"><i class="fas fa-map-marker-alt"></i>Location:{{help.location}}</span>
+                    <span class="ms-3 me-2"><i class="fas fa-user-tie"></i>Profession: {{help.profession}}</span>
+                  </div>
+                  <div>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                      data-bs-target="#viewModal">
+                      <i class="fas fa-info-circle"></i> View
+                    </button>
+
+                    <button type="button" class="btn btn-danger btn-sm">
+                      <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm">
+                      <i class="fas fa-check-circle"></i> Accept
+                    </button>
+                    <button type="button" class="btn btn-warning btn-sm">
+                      <i class="fas fa-exclamation-circle"></i> Refer
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div>
-                <button type="button" class="btn btn-danger btn-sm">
-                  <i class="fas fa-trash-alt"></i> Delete
-                </button>
-                <button type="button" class="btn btn-success btn-sm">
-                  <i class="fas fa-check-circle"></i> Accept
-                </button>
-                <button type="button" class="btn btn-warning btn-sm">
-                  <i class="fas fa-exclamation-circle"></i> Refer
-                </button>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div id="normalContent" class="content-section" style="display: none;">
+            <!-- Content for Normal -->
+            {% for help in context.Normal %}
+            <div class="card mb-2" style="border-radius: 15px">
+              <div class="card-body p-4">
+                <h3 class="mb-3">{{help.title}}</h3>
+                <div class="description mb-3">
+                  <p>{{help.body}}</p>
+                </div>
+                <p class="small mb-0">
+                  <i class="far fa-star fa-lg"></i>
+                  <span class="mx-2">|</span> Created by
+                  <strong>@{{help.created_by.username}}</strong> on {{ help.created_at|date:"d M, Y" }}
+                </p>
+                <hr class="my-4" />
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <span class="ms-3 me-2"><i class="fas fa-map-marker-alt"></i>Location:{{help.location}}</span>
+                    <span class="ms-3 me-2"><i class="fas fa-user-tie"></i>Profession: {{help.profession}}</span>
+                  </div>
+                  <div>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                      data-bs-target="#viewModal">
+                      <i class="fas fa-info-circle"></i> View
+                    </button>
+
+                    <button type="button" class="btn btn-danger btn-sm">
+                      <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm">
+                      <i class="fas fa-check-circle"></i> Accept
+                    </button>
+                    <button type="button" class="btn btn-warning btn-sm">
+                      <i class="fas fa-exclamation-circle"></i> Refer
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
+            {% endfor %}
+          </div>
+
+          <div id="requestsContent" class="content-section" style="display: none;">
+            <!-- Content for Your Requests -->
+            {% for help in context.Your_requests %}
+            <div class="card mb-2" style="border-radius: 15px">
+              <div class="card-body p-4">
+                <h3 class="mb-3">{{help.title}}</h3>
+                <div class="description mb-3">
+                  <p>{{help.body}}</p>
+                </div>
+                <p class="small mb-0">
+                  <i class="far fa-star fa-lg"></i>
+                  <span class="mx-2">|</span> Created by
+                  <strong>@{{help.created_by.username}}</strong> on {{ help.created_at|date:"d M, Y" }}
+                </p>
+                <hr class="my-4" />
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <span class="ms-3 me-2"><i class="fas fa-map-marker-alt"></i>Location:{{help.location}}</span>
+                    <span class="ms-3 me-2"><i class="fas fa-user-tie"></i>Profession: {{help.profession}}</span>
+                  </div>
+                  <div>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                      data-bs-target="#viewModal">
+                      <i class="fas fa-info-circle"></i> View
+                    </button>
+
+                    <button type="button" class="btn btn-danger btn-sm">
+                      <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm">
+                      <i class="fas fa-check-circle"></i> Accept
+                    </button>
+                    <button type="button" class="btn btn-warning btn-sm">
+                      <i class="fas fa-exclamation-circle"></i> Refer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
           </div>
         </div>
-        {% endcomment %}
+
+
+
+        {% comment %} New Request {% endcomment %}
         <div class="fixed-bottom text-end me-3 mb-3">
-          <button
-            type="button"
-            class="btn btn-primary btn-lg"
-            data-bs-toggle="modal"
-            data-bs-target="#composeModal"
-          >
+          <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#composeModal">
             New Request
           </button>
         </div>
 
         <!-- Compose modal code -->
-        <div
-          class="modal fade"
-          id="composeModal"
-          tabindex="-1"
-          aria-labelledby="composeModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
+        <div class="modal fade" id="composeModal" tabindex="-1" aria-labelledby="composeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="composeModalLabel">Compose Help</h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <!-- Compose form code -->
-                <form>
-                  <!-- Form fields here -->
+                <form id="composeForm" method="POST">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label for="{{form.title.id}}" class="form-label">Subject <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="{{form.title.id}}" name="{{form.title.html_name}}"
+                      required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="tagInput" class="form-label">Tag someone:</label>
+                    <input type="text" class="form-control" id="tagInput" name="tag" autocomplete="off">
+                    <div id="tagDropdownContainer">
+                      <ul id="tagDropdown"></ul>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="{{form.location.id}}" class="form-label">Location <span
+                          class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="{{form.location.id}}"
+                        name="{{form.location.html_name}}" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="{{form.profession.id}}" class="form-label">Profession <span
+                          class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="{{form.profession.id}}"
+                        name="{{form.profession.html_name}}" required>
+                    </div>
+                    <div class="col-md-12">
+                      <small class="form-text text-muted">
+                        This location and profession are required to send to people who are in that region and
+                        profession.
+                      </small>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="{{form.request_type.id}}" class="form-label">Type of Request</label>
+                    <select class="form-select" id="{{form.request_type.id}}" name="{{form.request_type.html_name}}">
+                      <option value="U">Urgent</option>
+                      <option value="H">High Priority</option>
+                      <option value="N">Normal</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="{{form.body.id}}" class="form-label">Body <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="{{form.body.id}}" name="{{form.body.html_name}}" rows="5"
+                      required></textarea>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                  </div>
                 </form>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Cancel
-                </button>
-                <button type="button" class="btn btn-primary">Send</button>
               </div>
             </div>
           </div>
         </div>
+
+
       </div>
     </div>
   </div>
 </section>
+{% comment %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> {% endcomment %}
+<script>
+  $(document).ready(function () {
+    var selectedUsernames = []; // Keep track of selected usernames
+
+    function searchUsernames(searchText) {
+      $.ajax({
+        url: '/autocomplete/',
+        method: 'GET',
+        data: { input: searchText },
+        success: function (data) {
+          var dropdownContainer = $('#tagDropdownContainer');
+          var dropdown = $('#tagDropdown');
+          dropdown.empty();
+          if (data.length > 0) {
+            $.each(data, function (index, value) {
+              var cardHtml = '<li class="tagCard">' +
+                '<div class="tagCardHeader">' +
+                '<strong>' + value.username + '</strong>' +
+                '</div>' +
+                '<div class="tagCardBody">' +
+                value.firstName + ' ' + value.lastName + '<br>' +
+                value.jnv + ', ' + value.batch +
+                '</div>' +
+                '</li>';
+              var card = $(cardHtml);
+              card.on('click', function () {
+                var selectedUsername = value.username;
+                selectedUsernames.push(selectedUsername);
+                addRecipientToTagLine(selectedUsername);
+                $('#tagInput').val(''); // Clear the input field
+                searchUsernames(''); // Trigger search with empty input to reset suggestions
+              });
+              dropdown.append(card);
+            });
+            dropdownContainer.show();
+          } else {
+            dropdownContainer.hide();
+          }
+        },
+        error: function () {
+          console.log('Error occurred while fetching autocomplete suggestions.');
+        }
+      });
+    }
+
+    $('#tagInput').on('input', function () {
+      var input = $(this).val();
+      if (input.length > 3) {
+        var searchText = input.substring(input.lastIndexOf('@') + 1);
+        searchUsernames(searchText);
+      } else {
+        $('#tagDropdownContainer').hide();
+      }
+    });
+
+    $('#tagInput').on('keydown', function (e) {
+      if (e.which === 186) { // Check if semicolon (;) key is pressed
+        e.preventDefault();
+        var input = $(this).val();
+        var selectedUsername = input.substring(input.lastIndexOf('@') + 1);
+        if (selectedUsername.length > 0) {
+          selectedUsernames.push(selectedUsername);
+          addRecipientToTagLine(selectedUsername);
+          $(this).val('');
+        }
+      }
+    });
+
+    function addRecipientToTagLine(recipient) {
+      var tagInput = $('#tagInput');
+      var currentTag = tagInput.val();
+      var atIndex = currentTag.lastIndexOf('@');
+      var beforeAtText = currentTag.substring(0, atIndex);
+      var afterAtText = currentTag.substring(atIndex + 1);
+      var selectedUsernamesString = selectedUsernames.join(';');
+      var newTag = beforeAtText + '@[[' + selectedUsernamesString + ']]' + afterAtText;
+      tagInput.val(newTag);
+      $('#tagDropdownContainer').hide();
+    }
+  });
+  document.getElementById("urgentNav").addEventListener("click", showSection.bind(null, "urgentContent"));
+  document.getElementById("highPriorityNav").addEventListener("click", showSection.bind(null, "highPriorityContent"));
+  document.getElementById("normalNav").addEventListener("click", showSection.bind(null, "normalContent"));
+  document.getElementById("requestsNav").addEventListener("click", showSection.bind(null, "requestsContent"));
+  function showSection(contentId) {
+    var contentSections = document.querySelectorAll(".content-section");
+    var navbarLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+    contentSections.forEach(function (section) {
+      if (section.id ===  contentId) {
+        section.style.display = "block";
+      } else {
+        section.style.display = "none";
+      }
+    });
+    navbarLinks.forEach(function (link) {
+      if (link.href === window.location.href + "#" + contentId) {
+        link.classList.add("active");
+      } else {
+        link.classList.remove("active");
+      }
+    });
+  }
+</script>
+<style>
+  #tagDropdownContainer {
+    position: relative;
+    width: 100%;
+  }
+
+  #tagDropdown {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .tagCard {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .tagCard:hover {
+    background-color: #f0f0f0;
+  }
+</style>
 {% endblock %}

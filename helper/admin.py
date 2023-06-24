@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Help, Referral
+from .models import Request, Comment
 
 # Register your models here.
-admin.site.register(Help)
-admin.site.register(Referral)
+admin.site.register(Request)
+admin.site.register(Comment)

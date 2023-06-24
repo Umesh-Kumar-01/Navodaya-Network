@@ -8,6 +8,7 @@ from .forms import SignUpForm
 from mysite.constants import JNV_MAP_LIST
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 # Create your views here.
 def index(request):
@@ -71,3 +72,11 @@ def search(request):
 @login_required
 def notification(request):
     return render(request,'notification.html')
+
+@login_required
+def autocomplete(request):
+    user_name = request.GET.get('input','')
+    users = User.objects.filter(username__icontains = user_name).values_list('username',flat=True)
+    results = list(users)
+    print(results)
+    return JsonResponse(results,safe=False)

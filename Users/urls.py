@@ -7,5 +7,6 @@ urlpatterns = [
     path('signup/',views.signup,name='signup'),
     path('search/',views.search,name='search'),
     path('notification/',views.notification,name='notification'),
+    path('autocomplete/',views.autocomplete,name='autocomplete'),
     path('',RedirectView.as_view(url='home/'))
 ]
