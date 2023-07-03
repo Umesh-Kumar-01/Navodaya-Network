@@ -9,17 +9,17 @@
     User Not Found! Please Check Your inputs again.
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
-{% endif %}
+  {% endif %}
   {% if next %}
-  {% if user.is_authenticated %}
-  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    <p>Your account doesn't have access to this page. To proceed,
-      please login with an account that has access.</p>
+  <div class="alert alert-warning alert-dismissible fade show mt-2" role="alert" style="position:absolute;">
+    {% if user.is_authenticated %}
+    <strong>Message: </strong>Your account doesn't have access to this page. To proceed, please login with an account
+    that has access.
     {% else %}
-      <p>Please login to see this page.</p>
+    <strong>Message: </strong>Please login to see this page.
+    {% endif %}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
-  {% endif %}
   {% endif %}
 </div>
 
@@ -89,14 +89,16 @@
               <div class="mb-4">
                 <!-- Email input -->
                 <div class="form-outline">
-                  <input type="text" id="{{form.username.id}}" class="form-control" name="{{form.username.html_name}}" required>
+                  <input type="text" id="{{form.username.id}}" class="form-control" name="{{form.username.html_name}}"
+                    required>
                   <label class="form-label" for="{{form.username.id}}">{{form.username.label}}</label>
                 </div>
               </div>
               <div class="mb-4">
                 <!-- Password input -->
                 <div class="form-outline">
-                  <input type="password" id="{{form.password.id}}" class="form-control" name="{{form.password.html_name}}" required>
+                  <input type="password" id="{{form.password.id}}" class="form-control"
+                    name="{{form.password.html_name}}" required>
                   <label class="form-label" for="{{form.password.id}}">{{form.password.label}}</label>
                 </div>
               </div>
@@ -115,22 +117,22 @@
               <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
             </div>
           </div>
-          
+
         </div>
       </div>
     </div>
   </div>
 </section>
 <style>
-.bg-glass {
-  background-color: hsla(0, 0%, 100%, 0.9) !important;
-  backdrop-filter: saturate(200%) blur(25px);
-  /* Add the following lines */
-  position: relative;
-  z-index: 1;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
+  .bg-glass {
+    background-color: hsla(0, 0%, 100%, 0.9) !important;
+    backdrop-filter: saturate(200%) blur(25px);
+    /* Add the following lines */
+    position: relative;
+    z-index: 1;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
 </style>
 <!-- Section: Design Block -->
 {% endblock%}

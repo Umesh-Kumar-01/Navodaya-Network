@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 # Create your views here.
 # @login_required
@@ -24,7 +25,6 @@ def helper(request):
     context = get_filtered_requests(request.user)
     # for x,y in context.items():
     #     print(x,len(y))
-    dangerMessages = []
     if request.method == 'POST':
         form = RequestForm(request.POST)
         if form.is_valid():
@@ -35,15 +35,13 @@ def helper(request):
             
             new_request.deletion_at = new_request.created_at + timedelta(days=expire_time)
             new_request.save()
-            dangerMessages.append("Request Submitted Successfully!") # New Message needs to implement
+            messages.success(request,"Request Submitted Successfully!") # New Message needs to implement
         
         else:
-            dangerMessage = ""
             for field_name, errors in form.errors.items():
                 for error in errors:
-                    dangerMessage += f"{field_name}: {error}\n"
-            dangerMessages.append(dangerMessage)
+                    messages.error(request,f"{field_name}: {error}")
     else:
         form = RequestForm()
     
-    return render(request,'helper.html',{'form':form,"dangerMessages":dangerMessages,"context":context})
+    return render(request,'helper.html',{'form':form,"context":context})

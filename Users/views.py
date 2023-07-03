@@ -9,11 +9,11 @@ from mysite.constants import JNV_MAP_LIST
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
-    error_message = []
-    return render(request,'index.html',{'dangerMessages': error_message})
+    return render(request,'index.html')
 
 @login_required
 def profile(request,username):
@@ -22,19 +22,18 @@ def profile(request,username):
 
 def signup(request):
     if request.user.is_authenticated:
-        dangerMessages = ["Redirecting to Home Page...\nYou cannot access Sign up page while being logged In. Please Log out first!"]
-        return render(request,'index.html',{'dangerMessages':dangerMessages})
+        messages.warning(request,"Redirecting to Home Page...\nYou cannot access Sign up page while being logged In. Please Log out first!")
+        return render(request,'index.html')
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('index')  # Replace 'index' with the name of your index view
         else:
-            dangerMessage = ""
             for field_name, errors in form.errors.items():
                 for error in errors:
-                    dangerMessage += f"{field_name}: {error}\n"
-            return render(request, 'your_template.html', {'form': form, 'dangerMessages': [dangerMessage]})
+                    messages.error(request,f"{field_name}: {error}")
+            return render(request, 'your_template.html', {'form': form})
         #     return HttpResponse("There is an Error!")
     else:
         form = SignUpForm()

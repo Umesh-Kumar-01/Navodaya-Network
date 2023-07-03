@@ -1,94 +1,112 @@
+<!-- base.html -->
 {% comment "block elements" %}
-content: contains of body
-title: title of base file
+content: contains the body
+title: title of the base file
 {% endcomment %}
 
 {% load static %}
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-      {% block title %}
-      {% endblock title %}
-    </title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
-    {% comment %} <script src="https://use.fontawesome.com/31b171a10a.js"></script> {% endcomment %}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-      <div class="container-fluid">
-        <a class="navbar-brand">Navodaya Network</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="{% url 'index' %}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href = "{% url 'helper' %}">Helper</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href = "{% url 'search' %}">Advance Search</a>
-            </li>
-            {% if user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'notification' %}">Notifications</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled">Hey! {{ user.get_username }}</a>
-              </li>
-              <li class="nav-item">
-                <form class="d-flex" action="{% url 'logout' %}" method="GET">
-                  <button type="submit" class="btn btn-danger">Logout</button>
-                </form>
-              </li>
-            {% else %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
-              </li>
-            {% endif %}
-          </ul>
-          {% if user.is_authenticated %}
-            <form class="d-flex" role="search" action="{% url 'search' %}" method="GET">
-              <input class="form-control me-2" type="search" placeholder="First Name of Person" aria-label="Search" name='fname'>
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-          {% else %}
-            <form class="d-flex" action="{% url 'login' %}" method="GET">
-              <button type="submit" class="btn btn-primary">Login</button>
-            </form>
-          {% endif %}
-        </div>
-      </div>
-    </nav>
 
-    <div id="danger-messages">
-      {% for message in dangerMessages %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    {% block title %}
+    {% endblock title %}
+  </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand">Navodaya Network</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'helper' %}">Helper</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'search' %}">Advance Search</a>
+          </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'notification' %}">Notifications</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled">Hey! {{ user.get_username }}</a>
+          </li>
+          <li class="nav-item">
+            <form class="d-flex" action="{% url 'logout' %}" method="GET">
+              <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+          </li>
+          {% endif %}
+        </ul>
+        {% if user.is_authenticated %}
+        <form class="d-flex" role="search" action="{% url 'search' %}" method="GET">
+          <input class="form-control me-2" type="search" placeholder="First Name of Person" aria-label="Search"
+            name='fname'>
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        {% else %}
+        <form class="d-flex" action="{% url 'login' %}" method="GET">
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <div class="container position-relative">
+    {% if messages %}
+    <div class="position-fixed top-0 end-0 mt-3" style="z-index:1;">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
       {% endfor %}
     </div>
+    {% endif %}
+  
+    <div class="position-relative">
+      <div class="content">
+        {% block content %}
+        {% endblock content %}
+      </div>
+    </div>
+  </div>
+  
+  
 
-    {% block content %}
-    {% endblock content %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function () {
+      // Initialize Bootstrap alert functionality
+      var alertList = document.querySelectorAll('.alert')
+      alertList.forEach(function (alert) {
+        new bootstrap.Alert(alert)
+      })
+    });
+  </script>
+</body>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    <script>
-      $(document).ready(function() {
-        // Initialize Bootstrap alert functionality
-        var alertList = document.querySelectorAll('.alert')
-        alertList.forEach(function (alert) {
-          new bootstrap.Alert(alert)
-        })
-      });
-    </script>
-  </body>
 </html>
