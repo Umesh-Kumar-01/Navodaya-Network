@@ -12,9 +12,13 @@ from django.http import JsonResponse
 
 # Create your views here.
 def index(request):
-    print(request.POST)
     error_message = []
     return render(request,'index.html',{'dangerMessages': error_message})
+
+@login_required
+def profile(request,username):
+    user_name = username
+    return render(request,'profile.html')
 
 def signup(request):
     if request.user.is_authenticated:

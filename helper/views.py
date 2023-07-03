@@ -22,8 +22,8 @@ def get_filtered_requests(user):
 @login_required
 def helper(request):
     context = get_filtered_requests(request.user)
-    for x,y in context.items():
-        print(x,len(y))
+    # for x,y in context.items():
+    #     print(x,len(y))
     dangerMessages = []
     if request.method == 'POST':
         form = RequestForm(request.POST)
