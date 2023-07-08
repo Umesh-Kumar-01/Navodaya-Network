@@ -45,3 +45,8 @@ def helper(request):
         form = RequestForm()
     
     return render(request,'helper.html',{'form':form,"context":context})
+
+@login_required
+def view_request(request,request_id):
+    
+    return render(request,'request.html',{"request_id":request_id})
