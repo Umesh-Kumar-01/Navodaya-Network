@@ -39,48 +39,106 @@ Request {{ request_id }}
             <h5 class="card-title mb-4">Chat</h5>
             <div class="message-container">
               <!-- Insert the chat messages HTML code here -->
-              {% for comment in comments %}
-              <div class="card comment-card">
+            {% for comment in comments %}
+              <div class="card comment-card {% if comment.is_special %}special-comment{% endif %}">
                 <div class="card-body">
                   <div class="comment-details">
-                    <div class="comment-user">{{ comment.created_by.first_name }} {{ comment.created_by.last_name }} | <a class="text-decoration-none" href="{% url 'profile' comment.created_by.username %}" style="color:{% if comment.created_by.username == help.created_by.username %}red{% else %}orange{% endif %}; font-weight:lighter;">
-                      @{{ comment.created_by.username }}
-                    </a></div>
+                    <div class="comment-user">
+                      {{ comment.created_by.first_name }} {{ comment.created_by.last_name }} |
+                      <a class="text-decoration-none" href="{% url 'profile' comment.created_by.username %}"
+                        style="color:{% if comment.created_by.username == help.created_by.username %}red{% else %}orange{% endif %}; font-weight:lighter;">
+                        @{{ comment.created_by.username }}
+                      </a>
+                    </div>
                     <div class="comment-time">{{ comment.created_at|date:"d M, Y" }}</div>
                   </div>
+                  {% if comment.is_special %}
+                  <div class="special-design">
+                    User who created this comment shared their contact details with the user who created the request.
+                    Information is safe and encrypted.
+                  </div>
+                  <button type="button" class="btn btn-primary view-button" data-bs-toggle="modal"
+                    data-bs-target="#contactModal{{ comment.id }}">View</button>
+                  <!-- Modal -->
+                  <div class="modal fade" id="contactModal{{ comment.id }}" tabindex="-1"
+                    aria-labelledby="contactModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="contactModalLabel">Contact details Shared by {{
+                            comment.created_by.username }}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          {% if comment.created_by.username == help.created_by.username %}
+                          <p>User: {{ comment.created_by.first_name }} {{ comment.created_by.last_name }}</p>
+                          {% if comment.mobile_number %}
+                          <p>Shared contact details: {{ comment.mobile_number }}</p>
+                          {% endif %}
+                          {% if comment.email %}
+                          <p>Shared email: {{ comment.email }}</p>
+                          {% endif %}
+                          <p>Private message: {{ comment.text }}</p>
+                          {% else %}
+                          <p>These details will be visible only to the user who created the request.</p>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% else %}
                   <p class="comment-text">{{ comment.text }}</p>
+                  {% endif %}
                 </div>
               </div>
               {% endfor %}
+
             </div>
           </div>
           <form id="myForm" method="POST">
             {% csrf_token %}
             <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar" class="avatar">
-              <textarea class="form-control form-control-lg" id="exampleFormControlTextarea1" rows="3" placeholder="Type message" name="message" required></textarea>
-              <a class="ms-1 text-muted" href="#!" data-bs-toggle="modal" data-bs-target="#contactModal"><i class='fas fa-address-book'></i>
-              <!-- Modal -->
-              <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="contactModalLabel">Share Your Contact Details Privately</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <p>Note: Your contact details will be visible to the user who created the request only.</p>
-                      <button type="button" class="btn btn-primary">Share your Mobile Number</button>
-                      <button type="button" class="btn btn-primary">Share your Email</button>
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar"
+                class="avatar">
+              <textarea class="form-control form-control-lg" id="exampleFormControlTextarea1" rows="3"
+                placeholder="Type message" name="text"></textarea>
+                <a class="ms-1 text-muted" href="#contactModal" data-bs-backdrop="static" data-bs-toggle="modal"><i class='fas fa-address-book'></i></a>
+
+                <!-- Modal -->
+                <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="contactModalLabel">Share Your Contact Details Privately</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Note: Your contact details will be visible to the user who created the request only.</p>
+                        <div class="form-floating mb-3">
+                          <input type="tel" class="form-control" id="mobileNumber" placeholder="Mobile Number" name="mobile_number">
+                          <label for="mobileNumber">Mobile Number</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                          <input type="email" class="form-control" id="email" placeholder="Email" name="email">
+                          <label for="email">Email</label>
+                        </div>
+                        <div class="form-floating">
+                          <textarea class="form-control" id="privateMessage" placeholder="Private Message" name="private_text"></textarea>
+                          <label for="privateMessage">Private Message</label>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="privateSubmitForm">Send</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <a class="ms-3 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
-              <button type="submit" class="btn btn-link" id="submitForm"><i class="fas fa-paper-plane"></i></button>
+                
+                <a class="ms-3 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
+                <button type="submit" class="btn btn-link" id="submitForm"><i class="fas fa-paper-plane"></i></button>
             </div>
           </form>
-          
+
         </div>
       </div>
     </div>
@@ -196,6 +254,15 @@ Request {{ request_id }}
 <script>
   function submitForm() {
     document.getElementById('myForm').submit();
-  }  
+  }
+  document.getElementById('myForm').addEventListener('submit', function (event) {
+    const textareaAValue = document.getElementById('exampleFormControlTextarea1').value.trim();
+    const textareaBValue = document.getElementById('privateMessage').value.trim();
+
+    if (textareaAValue === '' && textareaBValue === '') {
+      event.preventDefault();
+      alert('Please write something before sending the message');
+    }
+  });
 </script>
 {% endblock content %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect,HttpResponse, get_object_or_404
 from .models import Request, Comment
 from .forms import RequestForm, CommentForm
 from datetime import datetime, timedelta
@@ -47,13 +47,21 @@ def helper(request):
     return render(request,'helper.html',{'form':form,"context":context})
 
 @login_required
-def view_request(request,request_id):
-    help_request = Request.objects.get(help_id=request_id)
+def view_request(request, request_id):
+    help_request = get_object_or_404(Request, help_id=request_id)
     if request.method == "POST":
-        Comment.objects.create(
-            request = help_request,
-            created_by = request.user,
-            text = request.POST["message"]
-        )
-    comments = Comment.objects.filter(request = help_request).order_by("created_at")
-    return render(request,'request.html',{"help":help_request,"comments":comments})
+        request.POST = request.POST.copy()
+        if request.POST['private_text']!="":
+            request.POST['text']=request.POST['private_text']
+        print(request.POST)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.request = help_request
+            comment.created_by = request.user
+            comment.save()
+        print(form.errors)
+    else:
+        form = CommentForm()
+    comments = Comment.objects.filter(request=help_request).order_by("created_at")
+    return render(request, 'request.html', {"help": help_request, "comments": comments, "form": form})
