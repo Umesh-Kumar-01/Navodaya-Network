@@ -48,5 +48,12 @@ def helper(request):
 
 @login_required
 def view_request(request,request_id):
-    
-    return render(request,'request.html',{"request_id":request_id})
+    help_request = Request.objects.get(help_id=request_id)
+    if request.method == "POST":
+        Comment.objects.create(
+            request = help_request,
+            created_by = request.user,
+            text = request.POST["message"]
+        )
+    comments = Comment.objects.filter(request = help_request).order_by("created_at")
+    return render(request,'request.html',{"help":help_request,"comments":comments})

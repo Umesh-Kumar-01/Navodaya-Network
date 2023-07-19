@@ -1,121 +1,201 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  Request {{ request_id }}
+Request {{ request_id }}
 {% endblock %}
 
 {% block content %}
-<section style="background-color: #eee;">
+<style>
+  body {
+    background-color: #c0c0c0;
+  }
+</style>
+<section>
   <div class="container py-5">
     <div class="row d-flex justify-content-center">
       <div class="col-md-12 col-lg-10 col-xl-8">
-        <div class="card" id="chat2">
-          <div class="card-header d-flex justify-content-between align-items-center p-3">
-            <h5 class="mb-0">Request ID: {{ request_id }}</h5>
+        <div class="card" style="border-radius: 15px;">
+          <div class="card-header d-flex justify-content-between align-items-center p-3" style="border-radius: 15px;">
+            <h5 class="mb-0">Request ID: {{ help.help_id }}</h5>
+            {% if request.user.username == help.created_by.username%}
             <button type="button" class="btn btn-danger btn-sm" data-mdb-ripple-color="dark">Delete</button>
+            {% endif %}
           </div>
-          <div class="card-body" data-mdb-perfect-scrollbar="true" style="position: relative; height: 500px; overflow:auto;">
-            <h5 class="card-title mb-4">Request Details</h5>
-            <h6 class="card-subtitle mb-3 text-muted">Created by <strong>@{{ help.created_by.username }}</strong> on {{ help.created_at|date:"d M, Y" }}</h6>
-            <p class="card-text">{{ help.body }}</p>
-            <div class="d-flex justify-content-between align-items-center mt-4">
-              <div>
-                <span><i class="fas fa-map-marker-alt"></i> {{ help.location }}</span>
-                <span><i class="fas fa-user-tie"></i> {{ help.profession }}</span>
+          <div class="card-body">
+            <div class="post-details">
+              <div class="post-upvotes">{{help.request_type}}</div>
+              <div class="post-content">
+                <h5 class="card-title mb-4">Request Details</h5>
+                <h6 class="card-subtitle mb-3 text-muted">Created by <strong>@{{ help.created_by.username }}</strong>
+                  on {{help.created_at|date:"d M, Y" }}</h6>
+                <p class="card-text">{{ help.body }}</p>
+                <div class="post-meta">
+                  <span><i class="fas fa-map-marker-alt"></i> {{ help.location }}</span>
+                  <span><i class="fas fa-user-tie"></i> {{ help.profession }}</span>
+                </div>
               </div>
             </div>
             <hr class="my-4" />
             <h5 class="card-title mb-4">Chat</h5>
             <div class="message-container">
               <!-- Insert the chat messages HTML code here -->
-              <div class="container-fluid mt-100">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <div class="media flex-wrap w-100 align-items-center"> <img src="https://i.imgur.com/iNmBizf.jpg" class="d-block ui-w-40 rounded-circle" alt="">
-                                    <div class="media-body ml-3"> <a href="javascript:void(0)" data-abc="true">Tom Harry</a>
-                                        <div class="text-muted small">13 days ago</div>
-                                    </div>
-                                    <div class="text-muted small ml-3">
-                                        <div>Member since <strong>01/1/2019</strong></div>
-                                        <div><strong>134</strong> posts</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <p> For me, getting my business website made was a lot of tech wizardry things. Thankfully i get an ad on Facebook ragarding commence website. I get connected with BBB team. They made my stunning website live in just 3 days.
-                                    With the increase demand of online customers. I had to take my business online. BBB Team guided me at each step and enabled me to centralise my work and have control on all aspect of my online business.
-                                </p>
-                                <p> For me, getting my business website made was a lot of tech wizardry things. Thankfully i get an ad on Facebook ragarding commence website. I get connected with BBB team. They made my stunning website live in just 3 days.
-                                    With the increase demand of online customers. I had to take my business online. BBB Team guided me at each step and enabled me to centralise my work and have control on all aspect of my online business.
-                                </p>
-                            </div>
-                            <div class="card-footer d-flex flex-wrap justify-content-between align-items-center px-0 pt-0 pb-3">
-                                <div class="px-4 pt-3"> <a href="javascript:void(0)" class="text-muted d-inline-flex align-items-center align-middle" data-abc="true"> <i class="fa fa-heart text-danger"></i>&nbsp; <span class="align-middle">445</span> </a> <span class="text-muted d-inline-flex align-items-center align-middle ml-4"> <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">14532</span> </span> </div>
-                                <div class="px-4 pt-3"> <button type="button" class="btn btn-primary"><i class="ion ion-md-create"></i>&nbsp; Reply</button> </div>
-                            </div>
-                        </div>
-                    </div>
+              {% for comment in comments %}
+              <div class="card comment-card">
+                <div class="card-body">
+                  <div class="comment-details">
+                    <div class="comment-user">{{ comment.created_by.first_name }} {{ comment.created_by.last_name }} | <a class="text-decoration-none" href="{% url 'profile' comment.created_by.username %}" style="color:{% if comment.created_by.username == help.created_by.username %}red{% else %}orange{% endif %}; font-weight:lighter;">
+                      @{{ comment.created_by.username }}
+                    </a></div>
+                    <div class="comment-time">{{ comment.created_at|date:"d M, Y" }}</div>
+                  </div>
+                  <p class="comment-text">{{ comment.text }}</p>
                 </div>
-            </div>
-
-
+              </div>
+              {% endfor %}
             </div>
           </div>
-          <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar" class="avatar">
-            <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1" placeholder="Type message">
-            <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
-            <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
-            <a class="ms-3" href="#!"><i class="fas fa-paper-plane"></i></a>
-          </div>
+          <form id="myForm" method="POST">
+            {% csrf_token %}
+            <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar" class="avatar">
+              <textarea class="form-control form-control-lg" id="exampleFormControlTextarea1" rows="3" placeholder="Type message" name="message" required></textarea>
+              <a class="ms-1 text-muted" href="#!" data-bs-toggle="modal" data-bs-target="#contactModal"><i class='fas fa-address-book'></i>
+              <!-- Modal -->
+              <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="contactModalLabel">Share Your Contact Details Privately</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Note: Your contact details will be visible to the user who created the request only.</p>
+                      <button type="button" class="btn btn-primary">Share your Mobile Number</button>
+                      <button type="button" class="btn btn-primary">Share your Email</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <a class="ms-3 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
+              <button type="submit" class="btn btn-link" id="submitForm"><i class="fas fa-paper-plane"></i></button>
+            </div>
+          </form>
+          
         </div>
       </div>
     </div>
   </div>
 </section>
+
 <style>
   .card {
-    border-radius: 15px;
-    width: 100%;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
 
-  .avatar {
-    width: 45px;
-    height: 100%;
+  .card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e6e6e6;
   }
 
-  .message {
+  .card-header .btn-danger {
+    padding: 0.375rem 0.75rem;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .post-details {
     display: flex;
-    flex-direction: row;
     align-items: flex-start;
+    margin-bottom: 20px;
   }
 
-  .message-content {
-    margin-left: 10px;
+  .post-upvotes {
+    background-color: #f6f7f8;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    min-width: 50px;
+    text-align: center;
+    border-radius: 3px;
+    margin-right: 15px;
   }
 
-  .message-text {
-    margin: 0;
+  .post-content {
+    flex: 1;
   }
 
-  .message-time {
-    margin: 0;
+  .post-content .card-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  .post-subtitle {
+    margin-bottom: 10px;
+  }
+
+  .post-meta span {
+    margin-right: 15px;
+  }
+
+  .message-container {
+    overflow-y: auto;
+    max-height: 400px;
+  }
+
+  .card.comment-card {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
+
+  .card.comment-card .card-body {
+    padding: 15px;
+  }
+
+  .comment-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .comment-user {
+    font-weight: bold;
+  }
+
+  .comment-time {
     color: #a2aab7;
     font-size: 12px;
   }
 
-  .message.self .message-content {
+  .comment-text {
+    margin-bottom: 0;
+  }
+
+  .comment-actions {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .comment-reply {
     margin-right: 10px;
-    align-self: flex-end;
+    padding: 6px 12px;
   }
 
-  .card-footer {
-    background-color: #f5f6f7;
-    border-top: none;
-    border-radius: 0 0 15px 15px;
+  .avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
   }
-
 </style>
+<script>
+  function submitForm() {
+    document.getElementById('myForm').submit();
+  }  
+</script>
 {% endblock content %}
