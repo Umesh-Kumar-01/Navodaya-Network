@@ -39,7 +39,7 @@ Request {{ request_id }}
             <h5 class="card-title mb-4">Chat</h5>
             <div class="message-container">
               <!-- Insert the chat messages HTML code here -->
-            {% for comment in comments %}
+              {% for comment in comments %}
               <div class="card comment-card {% if comment.is_special %}special-comment{% endif %}">
                 <div class="card-body">
                   <div class="comment-details">
@@ -54,19 +54,21 @@ Request {{ request_id }}
                   </div>
                   {% if comment.is_special %}
                   <div class="special-design">
-                    User who created this comment shared their contact details with the user who created the request.
-                    Information is safe and encrypted.
+                    <button type="button" class="btn btn-primary special-button" data-bs-toggle="modal"
+                    data-bs-target="#contactModal{{ comment.id }}">Contact Details Shared!</button>
+                    <p class="special-info">
+                      <strong style="color:blue;">@{{comment.created_by.username}}</strong> shared their contact details with the User who created the
+                      request only <strong style="color:blue;">(@{{help.created_by.username}})</strong>.
+                    </p>
+                    <p class="special-note">Information is safe and will be deleted from the server once the request is deleted.</p>
                   </div>
-                  <button type="button" class="btn btn-primary view-button" data-bs-toggle="modal"
-                    data-bs-target="#contactModal{{ comment.id }}">View</button>
                   <!-- Modal -->
                   <div class="modal fade" id="contactModal{{ comment.id }}" tabindex="-1"
                     aria-labelledby="contactModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="contactModalLabel">Contact details Shared by {{
-                            comment.created_by.username }}</h5>
+                          <h5 class="modal-title" id="contactModalLabel">Contact Details Shared by {{comment.created_by.username }}</h5>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -80,7 +82,7 @@ Request {{ request_id }}
                           {% endif %}
                           <p>Private message: {{ comment.text }}</p>
                           {% else %}
-                          <p>These details will be visible only to the user who created the request.</p>
+                          <p> These details will be visible only to the user who created the request.</p>
                           {% endif %}
                         </div>
                       </div>
@@ -89,6 +91,7 @@ Request {{ request_id }}
                   {% else %}
                   <p class="comment-text">{{ comment.text }}</p>
                   {% endif %}
+
                 </div>
               </div>
               {% endfor %}
@@ -102,40 +105,44 @@ Request {{ request_id }}
                 class="avatar">
               <textarea class="form-control form-control-lg" id="exampleFormControlTextarea1" rows="3"
                 placeholder="Type message" name="text"></textarea>
-                <a class="ms-1 text-muted" href="#contactModal" data-bs-backdrop="static" data-bs-toggle="modal"><i class='fas fa-address-book'></i></a>
+              <a class="ms-1 text-muted" href="#contactModal" data-bs-backdrop="static" data-bs-toggle="modal"><i
+                  class='fas fa-address-book'></i></a>
 
-                <!-- Modal -->
-                <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="contactModalLabel">Share Your Contact Details Privately</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <!-- Modal -->
+              <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="contactModalLabel">Share Your Contact Details Privately</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Note: Your contact details will be visible to the user who created the request only.</p>
+                      <div class="form-floating mb-3">
+                        <input type="tel" class="form-control" id="mobileNumber" placeholder="Mobile Number"
+                          name="mobile_number">
+                        <label for="mobileNumber">Mobile Number</label>
                       </div>
-                      <div class="modal-body">
-                        <p>Note: Your contact details will be visible to the user who created the request only.</p>
-                        <div class="form-floating mb-3">
-                          <input type="tel" class="form-control" id="mobileNumber" placeholder="Mobile Number" name="mobile_number">
-                          <label for="mobileNumber">Mobile Number</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="email" placeholder="Email" name="email">
-                          <label for="email">Email</label>
-                        </div>
-                        <div class="form-floating">
-                          <textarea class="form-control" id="privateMessage" placeholder="Private Message" name="private_text"></textarea>
-                          <label for="privateMessage">Private Message</label>
-                        </div>
+                      <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="email" placeholder="Email" name="email">
+                        <label for="email">Email</label>
                       </div>
-                      <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="privateSubmitForm">Send</button>
+                      <div class="form-floating">
+                        <textarea class="form-control" id="privateMessage" placeholder="Private Message"
+                          name="private_text"></textarea>
+                        <label for="privateMessage">Private Message</label>
                       </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary" id="privateSubmitForm">Send</button>
                     </div>
                   </div>
                 </div>
-                
-                <a class="ms-3 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
-                <button type="submit" class="btn btn-link" id="submitForm"><i class="fas fa-paper-plane"></i></button>
+              </div>
+
+              <a class="ms-3 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
+              <button type="submit" class="btn btn-link" id="submitForm"><i class="fas fa-paper-plane"></i></button>
             </div>
           </form>
 
@@ -250,6 +257,36 @@ Request {{ request_id }}
     height: 45px;
     border-radius: 50%;
   }
+  /* Styles for the special-design container */
+.special-design {
+  background-color: #a4dfe0;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  margin-bottom: 10px;
+}
+
+.special-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.special-info {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.special-note {
+  font-size: 14px;
+  color: #777;
+}
 </style>
 <script>
   function submitForm() {
