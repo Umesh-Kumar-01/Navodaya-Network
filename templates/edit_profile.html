@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile{% endblock title %}
+{% block content %}
+<section style="background-color: #eee;">
+    <div class="container py-3">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Edit Profile</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <!-- UserCard Form Fields -->
+                            <div class="mb-3">
+                                <label for="profile_photo">Profile Photo</label>
+                                <input type="file" class="form-control" id="profile_photo" name="profile_photo">
+                                <!-- You can show the current photo as a preview if needed -->
+                                <img src="{{ user_card.profile_photo.url }}" alt="{{ user.username }}" class="img-thumbnail mt-2" style="max-width: 150px;">
+                            </div>
+
+                            <!-- Other UserCard Fields -->
+                            <!-- For example: Full Name, JNV Name, Region Name, etc. -->
+
+                            <!-- UserPrivateInfo Form Fields -->
+                            <div class="mb-3">
+                                <label for="current_location_city">Current Location City</label>
+                                <input type="text" class="form-control" id="current_location_city" name="current_location_city" value="{{ user_private_info.current_location_city }}">
+                            </div>
+
+                            <!-- Other UserPrivateInfo Fields -->
+                            <!-- For example: Current Location State, Zip, Profession, etc. -->
+
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a href="{% url 'profile' user.username %}" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

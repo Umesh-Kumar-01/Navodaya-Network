@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect,HttpResponse, get_object_or_404
 from .models import UserCard, UserPrivateInfo
 from datetime import datetime
 from django.contrib.auth.models import User
@@ -16,9 +16,41 @@ def index(request):
     return render(request,'index.html')
 
 @login_required
-def profile(request,username):
-    user_name = username
-    return render(request,'profile.html')
+def profile(request, username):
+    # Get the user's profile details based on the provided username
+    user = get_object_or_404(User, username=username)
+    user_card = get_object_or_404(UserCard, user=user)
+    user_private_info = get_object_or_404(UserPrivateInfo, user=user)
+
+    # Check if the current user is viewing their own profile
+    is_own_profile = request.user == user
+
+    context = {
+        'user_card': user_card,
+        'user_private_info': user_private_info,
+        'is_own_profile': is_own_profile,
+    }
+    return render(request, 'profile.html', context)
+
+@login_required
+def edit_profile(request):
+    # Get the user's profile details and private info for editing
+    user_card = get_object_or_404(UserCard, user=request.user)
+    user_private_info = get_object_or_404(UserPrivateInfo, user=request.user)
+
+    if request.method == 'POST':
+        # Process the form data for updating the profile
+        # ... Your form processing logic here ...
+        # For example, you can use Django forms to handle the form data.
+
+        # After updating, redirect to the user's profile page
+        return redirect('profile', username=request.user.username)
+
+    context = {
+        'user_card': user_card,
+        'user_private_info': user_private_info,
+    }
+    return render(request, 'edit_profile.html', context)
 
 def signup(request):
     if request.user.is_authenticated:
