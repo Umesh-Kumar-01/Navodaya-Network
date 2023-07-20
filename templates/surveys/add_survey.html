@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}New Survey{% endblock title %}
+
+{% block content %}
+<!-- templates/surveys/add_survey.html -->
+
+<h1>Add Survey</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Save">
+</form>
+
+
+{% endblock content %}

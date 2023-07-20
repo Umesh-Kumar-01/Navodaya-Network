@@ -22,5 +22,6 @@ urlpatterns = [
     # Adding new urlpatterns
     path('helper/',include('helper.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('surveys/', include('surveys.urls')),
     path('',include('Users.urls')),
 ]

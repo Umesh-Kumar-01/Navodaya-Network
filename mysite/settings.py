@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     # Adding New Apps
     'Users.apps.UsersConfig',
     'helper.apps.HelperConfig',
+    'channels',
+    'notifications_app.apps.NotificationsAppConfig',
+    'surveys.apps.SurveysConfig',
 ]
 
 MIDDLEWARE = [
