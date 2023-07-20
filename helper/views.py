@@ -53,14 +53,14 @@ def view_request(request, request_id):
         request.POST = request.POST.copy()
         if request.POST['private_text']!="":
             request.POST['text']=request.POST['private_text']
-        print(request.POST)
+        # print(request.POST)
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.request = help_request
             comment.created_by = request.user
             comment.save()
-        print(form.errors)
+        # print(form.errors)
     else:
         form = CommentForm()
     comments = Comment.objects.filter(request=help_request).order_by("created_at")
