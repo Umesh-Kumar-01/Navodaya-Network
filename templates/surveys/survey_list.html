@@ -5,16 +5,75 @@
 {% block content %}
 <!-- templates/surveys/survey_list.html -->
 
-<h1>Surveys</h1>
+<div class="container mt-5">
+  <h1>Surveys</h1>
 
-<ul>
-  {% for survey in surveys %}
-    <li>
-      <h3>{{ survey.heading }}</h3>
-      <p>{{ survey.description }}</p>
-      <a href="{{ survey.google_form_link }}" target="_blank">Take Survey</a>
-    </li>
-  {% endfor %}
-</ul>
+  <ul class="list-group mt-3">
+    {% for survey in surveys %}
+      <li class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h3>
+              <a href="{% url 'survey_detail' survey.pk %}">{{ survey.heading }}</a>
+            </h3>
+            <p>{{ survey.description }}</p>
+            <p>Created by: <a href="{% url 'profile' survey.creator.username %}">{{ survey.creator.username }}</a></p>
+            <p>Number of Respondents: {{ survey.total_respondents }}</p>
+          </div>
+          <div class="d-flex">
+            {% for respondent in survey.respondents.all %}
+              <img src="{{ respondent.profile.photo.url }}" alt="{{ respondent.username }}" class="rounded-circle mr-2" width="40" height="40">
+            {% endfor %}
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
 
+  <!-- Button to trigger the new survey creation modal -->
+  <button type="button" class="btn btn-primary mt-3 create-survey-btn" data-bs-toggle="modal" data-bs-target="#newSurveyModal">
+    Create New Survey
+  </button>
+
+</div>
+
+<!-- New Survey Creation Modal -->
+<div class="modal fade" id="newSurveyModal" tabindex="-1" role="dialog" aria-labelledby="newSurveyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title " id="newSurveyModalLabel">Create New Survey</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Your form to create a new survey here -->
+        <form method="post">
+          {% csrf_token %}
+          <!-- Your form fields go here -->
+          <div class="form-group">
+            <label for="survey-heading">Survey Heading</label>
+            <input type="text" class="form-control" id="survey-heading" name="heading" required>
+          </div>
+          <div class="form-group">
+            <label for="survey-description">Survey Description</label>
+            <textarea class="form-control" id="survey-description" name="description" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="survey-link">Google Form Link</label>
+            <input type="url" class="form-control" id="survey-link" name="google_form_link" required>
+          </div>
+          <button type="submit" class="btn btn-primary" >Create Survey</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+    /* Position the "Create New Survey" button */
+    .create-survey-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+    }
+  </style>
 {% endblock content %}

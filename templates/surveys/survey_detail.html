@@ -1,0 +1,79 @@
+<!-- surveys/templates/surveys/survey_detail.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Survey Detail - {{ survey.id }}{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      <div class="d-flex align-items-center">
+        <h4 class="ml-2">Survey ID: {{ survey.id }}</h4>
+      </div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">{{ survey.heading }}</h2>
+      <p class="card-text">{{ survey.description }}</p>
+      <p class="card-text">Created by: <a href="{% url 'profile' survey.creator.username %}">{{ survey.creator.username }}</a></p>
+      <p class="card-text">Number of Respondents: <span class="respondents-count">{{ survey.respondents.count }}</span></p>
+      <div class="d-flex">
+        {% for respondent in survey.respondents.all %}
+          <img src="{{ respondent.profile.photo.url }}" alt="{{ respondent.username }}" class="rounded-circle mr-2" width="40" height="40">
+        {% endfor %}
+      </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#surveyModal">Take Survey</button>
+        <form method="POST">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-success ml-2" id="markCompletedBtn" hidden>Mark Survey Completed</button>
+        </form>
+      </div>      
+  </div>
+</div>
+
+<!-- Survey Modal -->
+<div class="modal fade" id="surveyModal" tabindex="-1" role="dialog" aria-labelledby="surveyModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="surveyModalLabel">Take Survey</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Please note that you can hover over the button below to inspect the link and, if it is deemed safe, click on it to complete the survey.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="{{ survey.google_form_link }}" id="surveyLinkButton"class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ survey.google_form_link }}" target="_blank">Go to This Survey Page</a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .respondents-count {
+    background-color: #f2f2f2;
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+
+  .respondents-count span {
+    font-weight: bold;
+    font-size: 16px;
+  }
+</style>
+
+<script>
+    // Function to show "Mark Survey Completed" button
+    function showMarkCompletedBtn() {
+      const markCompletedBtn = document.getElementById('markCompletedBtn');
+      markCompletedBtn.removeAttribute('hidden');
+    }
+  
+    // Show "Mark Survey Completed" button when the "Go to This Survey Page" button is clicked
+    const goToSurveyBtn = document.getElementById('surveyLinkButton');
+    goToSurveyBtn.addEventListener('click', showMarkCompletedBtn);
+  </script>
+{% endblock content %}
