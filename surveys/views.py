@@ -12,9 +12,23 @@ def survey_list(request):
     surveys = Survey.objects.all()
 
     if request.method == 'POST':
-        # This is the view to handle the creation of a new survey
+        # Check if the current user has reached the maximum limit of uncompleted surveys
+        if not request.user.is_superuser:
+            uncompleted_surveys = surveys.filter(creator=request.user, is_completed=False)
+            if uncompleted_surveys.count() >= 3:
+                messages.error(request, "Maximum limit for survey submission is 3. Complete or delete previous surveys to add more.")
+                return redirect('survey_list')
+
         form = SurveyForm(request.POST)
         if form.is_valid():
+            # Check if the provided expiration date is valid
+            expire_on = form.cleaned_data.get('expire_on')
+            if expire_on:
+                current_time = timezone.now()
+                if expire_on <= current_time:
+                    messages.error(request, "Please provide a valid expiration date in the future.")
+                    return redirect('survey_list')
+            
             survey = form.save(commit=False)
             survey.creator = request.user
             survey.save()
@@ -57,8 +71,8 @@ def delete_survey(request, survey_id):
 
     if request.method == 'POST':
         # Handle the delete confirmation
-        if survey.expire_on and timezone.now() <= survey.expire_on:
-            messages.error(request, "Survey has not expired yet. You cannot delete it.")
+        if survey.expire_on and timezone.now() >= survey.expire_on:
+            messages.error(request, "Survey has Expired!. You cannot delete it Now.")
         else:
             # Perform any additional actions before deletion (e.g., delete files from the server)
             survey.delete()
@@ -71,7 +85,7 @@ def delete_survey(request, survey_id):
 def mark_as_complete(request, survey_id):
     survey = get_object_or_404(Survey, id=survey_id, creator=request.user)
 
-    if not survey.is_completed and survey.expire_on and survey.expire_on <= timezone.now():
+    if not survey.is_completed:
         # Perform any actions when marking the survey as complete
         survey.is_completed = True
         survey.save()

@@ -10,6 +10,15 @@
 
   <div class="row mt-3">
     <div class="col">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="showCompletedSwitch">
+        <label class="form-check-label" for="showCompletedSwitch">Show Completed Surveys</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col">
       <div class="table-responsive">
         <table class="table table-striped">
           <thead>
@@ -24,12 +33,20 @@
           </thead>
           <tbody>
             {% for survey in surveys %}
-              <tr>
+              {% if survey.is_special and not survey.is_completed %}
+                <tr class="special-survey not-completed-survey">
+              {% else %}
+                {% if survey.is_completed %}
+                  <tr class="completed-survey hidden">
+                {% else %}
+                  <tr class="not-completed-survey">
+                {% endif %}
+              {% endif %}
                 <td>{{ survey.pk }}</td>
                 <td><a href="{% url 'survey_detail' survey.pk %}">{{ survey.heading }}</a></td>
                 <td><a href="{% url 'profile' survey.creator.username %}" target="_blank">{{ survey.creator.username }}</a></td>
                 <td>{{ survey.created_on }}</td>
-                <td>{{ survey.last_date_to_submit }}</td>
+                <td>{{ survey.expire_on }}</td>
                 <td>{{ survey.total_respondents }}</td>
               </tr>
             {% endfor %}
@@ -82,11 +99,34 @@
 </div>
 
 <style>
-/* Position the "Create New Survey" button */
-.create-survey-btn {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-}
+  /* Position the "Create New Survey" button */
+  .create-survey-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+  }
+  .hidden {
+    display: none;
+  }
+
+  .special-survey {
+    background-color: lightblue;
+  }
 </style>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const showCompletedSwitch = document.getElementById('showCompletedSwitch');
+    const completedRows = document.querySelectorAll('.completed-survey');
+    const notCompletedRows = document.querySelectorAll('.not-completed-survey');
+
+    // Initially hide completed survey rows and show not-completed survey rows
+    completedRows.forEach(row => row.classList.add('hidden'));
+    notCompletedRows.forEach(row => row.classList.remove('hidden'));
+
+    showCompletedSwitch.addEventListener('change', function () {
+      completedRows.forEach(row => row.classList.toggle('hidden', !this.checked));
+      notCompletedRows.forEach(row => row.classList.toggle('hidden', this.checked));
+    });
+  });
+</script>
 {% endblock content %}

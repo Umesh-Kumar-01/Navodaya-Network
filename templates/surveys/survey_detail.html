@@ -9,26 +9,29 @@
   <div class="card">
     <div class="card-header">
       <div class="d-flex align-items-center justify-content-between">
-          <h4>Survey ID: {{ survey.id }}</h4>
+        <h4>Survey ID: {{ survey.id }}</h4>
+        <div class="d-flex">
           {% if survey.creator.username == request.user.username %}
-              <form action = "{% url 'delete_survey' survey.id  %}" method="post" class="d-inline-block">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-danger btn-sm" data-mdb-ripple-color="dark">Delete</button>
-              </form>
-              
-              {% if not survey.is_completed and survey.expire_on and survey.expire_on <= now %}
-              <form action = "{% url 'mark_as_complete' survey.id %}" method="post" class="d-inline-block">
-                {% csrf_token %}
-                  <a href="{% url 'mark_as_complete' survey.id %}" class="btn btn-primary btn-sm" data-mdb-ripple-color="dark">Mark as Complete</a>
-              </form>
-              {% endif %}
+          {% if not survey.is_completed %}
+            <form action="{% url 'mark_as_complete' survey.id %}" method="post" class="d-inline-block ml-2">
+              {% csrf_token %}
+              <a href="{% url 'mark_as_complete' survey.id %}" class="btn btn-primary btn-sm me-2" data-mdb-ripple-color="dark">Mark as Survey is Over</a>
+            </form>
+            <form action="{% url 'delete_survey' survey.id %}" method="post" class="d-inline-block">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm" data-mdb-ripple-color="dark">Delete</button>
+            </form>
+            {% endif %}
           {% endif %}
+        </div>
       </div>
+      
   </div>  
     <div class="card-body">
       <h2 class="card-title">{{ survey.heading }}</h2>
       <p class="card-text">{{ survey.description }}</p>
       <p class="card-text">Created by: <a href="{% url 'profile' survey.creator.username %}">{{ survey.creator.username }}</a></p>
+      <p class="card-text">Created On: {{survey.created_on}} | Expire On: {{ survey.expire_on }}</p>
       <p class="card-text">Number of Respondents: <span class="respondents-count">{{ survey.respondents.count }}</span></p>
       <div class="d-flex">
         {% for respondent in survey.respondents.all %}
@@ -37,15 +40,20 @@
       </div>
     </div>
     <div class="card-footer d-flex justify-content-between">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#surveyModal">Take Survey</button>
-        <form method="POST">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-success ml-2" id="markCompletedBtn" hidden>Mark Survey Completed</button>
-        </form>
+      {% if not survey.is_completed %}
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#surveyModal">Take Survey</button>
+      <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success ml-2" id="markCompletedBtn" hidden>Mark Survey Completed</button>
+      </form>
+    {% else %}
+      <button class="btn btn-success" disabled>Survey is Completed</button>
+    {% endif %}
       </div>      
   </div>
 </div>
 
+{% if not survey.is_completed %}
 <!-- Survey Modal -->
 <div class="modal fade" id="surveyModal" tabindex="-1" role="dialog" aria-labelledby="surveyModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -64,7 +72,19 @@
     </div>
   </div>
 </div>
+<script>
+    // Function to show "Mark Survey Completed" button
+    function showMarkCompletedBtn() {
+      const markCompletedBtn = document.getElementById('markCompletedBtn');
+      markCompletedBtn.removeAttribute('hidden');
+    }
+  
+    // Show "Mark Survey Completed" button when the "Go to This Survey Page" button is clicked
+    const goToSurveyBtn = document.getElementById('surveyLinkButton');
+    goToSurveyBtn.addEventListener('click', showMarkCompletedBtn);
+  </script>
 
+{% endif %}
 <style>
   .respondents-count {
     background-color: #f2f2f2;
@@ -78,15 +98,4 @@
   }
 </style>
 
-<script>
-    // Function to show "Mark Survey Completed" button
-    function showMarkCompletedBtn() {
-      const markCompletedBtn = document.getElementById('markCompletedBtn');
-      markCompletedBtn.removeAttribute('hidden');
-    }
-  
-    // Show "Mark Survey Completed" button when the "Go to This Survey Page" button is clicked
-    const goToSurveyBtn = document.getElementById('surveyLinkButton');
-    goToSurveyBtn.addEventListener('click', showMarkCompletedBtn);
-  </script>
 {% endblock content %}
