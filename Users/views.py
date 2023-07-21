@@ -98,7 +98,7 @@ def search(request):
 
     if year is not None and year != '':
         query &= Q(year=year)
-    context = UserCard.objects.filter(query)
+    context = UserCard.objects.filter(query).order_by('user_id')
     paginator = Paginator(context, 50)  # Change the number per page as needed
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
