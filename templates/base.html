@@ -53,16 +53,22 @@ title: title of the base file
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
       </li class="nav-item">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'notification' %}">
+          <i class="fas fa-bell"></i>
+          <span class="notification-count">0</span>
+        </a>
+      </li>
       <li class="navbar-nav">
         <div class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            <i class="fas fa-user-circle fa-lg rounded-circle"></i>
+          <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% if request.user.usercard.profile_photo %}
+              <img src="{{ request.user.usercard.profile_photo.url }}" alt="{{ user.username }}" class="rounded-circle" width="30" height="30">
+            {% else %}
+              <i class="fas fa-user-circle fa-lg rounded-circle"></i>
+            {% endif %}
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-            <li>
-              <a class="dropdown-item" href="{% url 'notification' %}">Notifications</a>
-            </li>
             <li>
               <a class="dropdown-item" href="{% url 'profile' username=user.username %}">Profile</a>
             </li>

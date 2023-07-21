@@ -101,9 +101,8 @@ Request {{ request_id }}
           <form id="myForm" method="POST">
             {% csrf_token %}
             <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar"
-                class="avatar">
-              <textarea class="form-control form-control-lg" id="exampleFormControlTextarea1" rows="3"
+            <img src="{{ request.user.usercard.profile_photo.url }}" alt="{{ request.user.username }}" class="avatar">
+              <textarea class="m-2 form-control form-control-lg" id="exampleFormControlTextarea1" rows="3"
                 placeholder="Type message" name="text"></textarea>
               <a class="ms-1 text-muted" href="#contactModal" data-bs-backdrop="static" data-bs-toggle="modal"><i
                   class='fas fa-address-book'></i></a>
