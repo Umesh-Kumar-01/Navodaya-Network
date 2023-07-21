@@ -67,18 +67,12 @@
                   </div>
                   <div>
                     <a href="{% url 'view_request' request_id=help.help_id %}" class="btn btn-info btn-sm">
-    <i class="fas fa-info-circle"></i> View
-</a>
+                      <i class="fas fa-info-circle"></i> View
+                    </a>
 
 
                     <button type="button" class="btn btn-danger btn-sm">
                       <i class="fas fa-trash-alt"></i> Delete
-                    </button>
-                    <button type="button" class="btn btn-success btn-sm">
-                      <i class="fas fa-check-circle"></i> Accept
-                    </button>
-                    <button type="button" class="btn btn-warning btn-sm">
-                      <i class="fas fa-exclamation-circle"></i> Refer
                     </button>
                   </div>
                 </div>
@@ -109,18 +103,12 @@
                   </div>
                   <div>
                     <a href="{% url 'view_request' request_id=help.help_id %}" class="btn btn-info btn-sm">
-    <i class="fas fa-info-circle"></i> View
-</a>
+                      <i class="fas fa-info-circle"></i> View
+                    </a>
 
 
                     <button type="button" class="btn btn-danger btn-sm">
                       <i class="fas fa-trash-alt"></i> Delete
-                    </button>
-                    <button type="button" class="btn btn-success btn-sm">
-                      <i class="fas fa-check-circle"></i> Accept
-                    </button>
-                    <button type="button" class="btn btn-warning btn-sm">
-                      <i class="fas fa-exclamation-circle"></i> Refer
                     </button>
                   </div>
                 </div>
@@ -151,18 +139,12 @@
                   </div>
                   <div>
                     <a href="{% url 'view_request' request_id=help.help_id %}" class="btn btn-info btn-sm">
-    <i class="fas fa-info-circle"></i> View
-</a>
+                      <i class="fas fa-info-circle"></i> View
+                    </a>
 
 
                     <button type="button" class="btn btn-danger btn-sm">
                       <i class="fas fa-trash-alt"></i> Delete
-                    </button>
-                    <button type="button" class="btn btn-success btn-sm">
-                      <i class="fas fa-check-circle"></i> Accept
-                    </button>
-                    <button type="button" class="btn btn-warning btn-sm">
-                      <i class="fas fa-exclamation-circle"></i> Refer
                     </button>
                   </div>
                 </div>
@@ -193,18 +175,12 @@
                   </div>
                   <div>
                     <a href="{% url 'view_request' request_id=help.help_id %}" class="btn btn-info btn-sm">
-    <i class="fas fa-info-circle"></i> View
-</a>
+                      <i class="fas fa-info-circle"></i> View
+                    </a>
 
 
                     <button type="button" class="btn btn-danger btn-sm">
                       <i class="fas fa-trash-alt"></i> Delete
-                    </button>
-                    <button type="button" class="btn btn-success btn-sm">
-                      <i class="fas fa-check-circle"></i> Accept
-                    </button>
-                    <button type="button" class="btn btn-warning btn-sm">
-                      <i class="fas fa-exclamation-circle"></i> Refer
                     </button>
                   </div>
                 </div>
@@ -261,7 +237,7 @@
                     </div>
                     <div class="col-md-12">
                       <small class="form-text text-muted">
-                        This location and profession are required to send to people who are in that region and
+                        This location and profession are required to send the request to the people who are in that region and
                         profession.
                       </small>
                     </div>
@@ -273,6 +249,9 @@
                       <option value="H">High Priority</option>
                       <option value="N">Normal</option>
                     </select>
+                    <small class="form-text text-muted">
+                      Expiry Time is different for different type of requests. Urgent will vanishes in 10 days, high priority in 20 days and normal in 30 days.
+                    </small>
                   </div>
                   <div class="mb-3">
                     <label for="{{form.body.id}}" class="form-label">Body <span class="text-danger">*</span></label>
@@ -385,7 +364,7 @@
     var navbarLinks = document.querySelectorAll(".navbar-nav .nav-link");
 
     contentSections.forEach(function (section) {
-      if (section.id ===  contentId) {
+      if (section.id === contentId) {
         section.style.display = "block";
       } else {
         section.style.display = "none";

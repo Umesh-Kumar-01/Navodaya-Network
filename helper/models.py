@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import date
+from django.utils import timezone
 
 class Request(models.Model):
     URGENT = 'U'
@@ -23,15 +23,22 @@ class Request(models.Model):
     title = models.CharField(max_length=300, default='')
     body = models.TextField(default='')
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=4)
     request_type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=NORMAL)
     deletion_at = models.DateTimeField(null=True, blank=True)
     profession = models.CharField(max_length=100,null=True,blank=True)
     location = models.CharField(max_length=100, null=True, blank=True)
+    subscribers = models.ManyToManyField(User, related_name='subscribed_requests', blank=True)
+    is_closed = models.BooleanField(default=False)
 
+    @property
     def is_expired(self):
-        if self.deletion_date:
-            return self.deletion_at <= date.today()
+        if self.deletion_at:
+            expired = self.deletion_at <= timezone.now()
+            if expired:
+                self.is_closed = True
+                self.save()
+            return expired
         return False
 
     def get_comments(self):
@@ -45,7 +52,7 @@ class Comment(models.Model):
     request = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='comments')
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments_created')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments_created', default=4)
     is_special = models.BooleanField(default=False)
     mobile_number = models.IntegerField(null=True,blank=True)
     email = models.EmailField(null=True,blank=True)
