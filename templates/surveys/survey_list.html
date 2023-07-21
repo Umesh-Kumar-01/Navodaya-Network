@@ -8,33 +8,41 @@
 <div class="container mt-5">
   <h1>Surveys</h1>
 
-  <ul class="list-group mt-3">
-    {% for survey in surveys %}
-      <li class="list-group-item">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h3>
-              <a href="{% url 'survey_detail' survey.pk %}">{{ survey.heading }}</a>
-            </h3>
-            <p>{{ survey.description }}</p>
-            <p>Created by: <a href="{% url 'profile' survey.creator.username %}">{{ survey.creator.username }}</a></p>
-            <p>Number of Respondents: {{ survey.total_respondents }}</p>
-          </div>
-          <div class="d-flex">
-            {% for respondent in survey.respondents.all %}
-              <img src="{{ respondent.profile.photo.url }}" alt="{{ respondent.username }}" class="rounded-circle mr-2" width="40" height="40">
+  <div class="row mt-3">
+    <div class="col">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Survey ID</th>
+              <th>Survey Heading</th>
+              <th>Created By</th>
+              <th>Created On</th>
+              <th>Last Date to Submit</th>
+              <th>Number of Respondents</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for survey in surveys %}
+              <tr>
+                <td>{{ survey.pk }}</td>
+                <td><a href="{% url 'survey_detail' survey.pk %}">{{ survey.heading }}</a></td>
+                <td><a href="{% url 'profile' survey.creator.username %}" target="_blank">{{ survey.creator.username }}</a></td>
+                <td>{{ survey.created_on }}</td>
+                <td>{{ survey.last_date_to_submit }}</td>
+                <td>{{ survey.total_respondents }}</td>
+              </tr>
             {% endfor %}
-          </div>
-        </div>
-      </li>
-    {% endfor %}
-  </ul>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
   <!-- Button to trigger the new survey creation modal -->
   <button type="button" class="btn btn-primary mt-3 create-survey-btn" data-bs-toggle="modal" data-bs-target="#newSurveyModal">
     Create New Survey
   </button>
-
 </div>
 
 <!-- New Survey Creation Modal -->
@@ -62,18 +70,23 @@
             <label for="survey-link">Google Form Link</label>
             <input type="url" class="form-control" id="survey-link" name="google_form_link" required>
           </div>
-          <button type="submit" class="btn btn-primary" >Create Survey</button>
+          <div class="form-group">
+            <label for="expire-on">Expire On</label>
+            <input type="datetime-local" class="form-control" id="expire-on" name="expire_on" required>
+          </div>
+          <button type="submit" class="mt-2 btn btn-primary" >Create Survey</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
 <style>
-    /* Position the "Create New Survey" button */
-    .create-survey-btn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-    }
-  </style>
+/* Position the "Create New Survey" button */
+.create-survey-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+}
+</style>
 {% endblock content %}

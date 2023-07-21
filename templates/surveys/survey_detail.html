@@ -8,10 +8,23 @@
 <div class="container mt-5">
   <div class="card">
     <div class="card-header">
-      <div class="d-flex align-items-center">
-        <h4 class="ml-2">Survey ID: {{ survey.id }}</h4>
+      <div class="d-flex align-items-center justify-content-between">
+          <h4>Survey ID: {{ survey.id }}</h4>
+          {% if survey.creator.username == request.user.username %}
+              <form action = "{% url 'delete_survey' survey.id  %}" method="post" class="d-inline-block">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm" data-mdb-ripple-color="dark">Delete</button>
+              </form>
+              
+              {% if not survey.is_completed and survey.expire_on and survey.expire_on <= now %}
+              <form action = "{% url 'mark_as_complete' survey.id %}" method="post" class="d-inline-block">
+                {% csrf_token %}
+                  <a href="{% url 'mark_as_complete' survey.id %}" class="btn btn-primary btn-sm" data-mdb-ripple-color="dark">Mark as Complete</a>
+              </form>
+              {% endif %}
+          {% endif %}
       </div>
-    </div>
+  </div>  
     <div class="card-body">
       <h2 class="card-title">{{ survey.heading }}</h2>
       <p class="card-text">{{ survey.description }}</p>
@@ -19,7 +32,7 @@
       <p class="card-text">Number of Respondents: <span class="respondents-count">{{ survey.respondents.count }}</span></p>
       <div class="d-flex">
         {% for respondent in survey.respondents.all %}
-          <img src="{{ respondent.profile.photo.url }}" alt="{{ respondent.username }}" class="rounded-circle mr-2" width="40" height="40">
+          <img src="{{ respondent.usercard.profile_photo.url }}" alt="{{ respondent.username }}" class="rounded-circle mr-2" width="40" height="40">
         {% endfor %}
       </div>
     </div>

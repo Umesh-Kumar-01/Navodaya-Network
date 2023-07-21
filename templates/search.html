@@ -119,16 +119,19 @@
             {% for user_card in context %}
             <div class="profile-card">
               <div class="profile-img" style="text-align: center;">
-                <i class="fas fa-user"></i>
+                {% if user_card.profile_photo %}
+                  <img src="{{ user_card.profile_photo.url }}" alt="{{ user_card.user.username }}" class="rounded-circle" width="100" height="100">
+                {% endif %}
               </div>
-              <h4 class="profile-name">{{ user_card.user.get_fname }} {{ user_card.user.get_full_name }}
+              <h4 class="profile-name">
+                <a href="{% url 'profile' user_card.user.username %}">{{ user_card.user.get_full_name }}</a>
                 {% if user_card.verified %}
                   <i class="fas fa-check-circle" style="color: green;"></i>
                 {% else %}
                   <i class="fas fa-times-circle" style="color: red;"></i>
                 {% endif %}
               </h4>
-              <p class="profile-info">Username: {{ user_card.user.username }}</p>
+              <p class="profile-info">Username: {{ user_card.user.username }}</p>             
               <p class="profile-info">JNV: {{ user_card.jnv_name }}</p>
               <p class="profile-info">Batch Year: {{ user_card.year }}</p>
               <p class="profile-info">Verified: {{ user_card.verified }}</p>
