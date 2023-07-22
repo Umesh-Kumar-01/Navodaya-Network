@@ -53,12 +53,19 @@ title: title of the base file
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
       </li class="nav-item">
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'notification' %}">
-          <i class="fas fa-bell"></i>
-          <span class="notification-count">0</span>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-bell"></i>
+            <span class="badge badge-pill badge-danger" id="notification-badge">3</span>
         </a>
-      </li>
+        <!-- Dropdown List for Notifications -->
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsDropdown" id="notification-dropdown-items">
+          <a class="dropdown-item" href="#">Notification 1</a>
+          <a class="dropdown-item" href="#">Notification 2</a>
+          <a class="dropdown-item" href="#">Notification 3</a>
+        </div>
+    </li>
+      {{ room_name|json_script:"room-name" }}
       <li class="navbar-nav">
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -124,7 +131,32 @@ title: title of the base file
         new bootstrap.Alert(alert)
       })
     });
-  </script>
+
+    {% comment %} WebSocket code below {% endcomment %}
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+    const notificationSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/notification/'
+        + roomName
+        + '/'
+    );
+
+    notificationSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        //document.querySelector('#notification-log').value += (data.message + '\n');
+        console.log(data)
+        document.getElementById("notification-dropdown-items").innerHTML = "<a class='dropdown-item' href='#'>"+ data+"</a>"+document.getElementById("notification-dropdown-items").innerHTML;
+        document.getElementById("notification-badge").innerHTML = parseInt(document.getElementById("notification-badge").innerHTML) + 1;
+    };
+
+    notificationSocket.onclose = function(e) {
+        console.error('Notification socket closed unexpectedly');
+    };
+
+    document.querySelector('#notification-message-input').focus();
+</script>
 </body>
 
 </html>

@@ -13,7 +13,9 @@ from django.contrib import messages
 
 # Create your views here.
 def index(request):
-    return render(request,'index.html')
+    return render(request,'index.html',{
+        "room_name":"broadcast",
+    })
 
 @login_required
 def profile(request, username):
