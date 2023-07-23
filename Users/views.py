@@ -13,9 +13,7 @@ from django.contrib import messages
 
 # Create your views here.
 def index(request):
-    return render(request,'index.html',{
-        "room_name":"broadcast",
-    })
+    return render(request,'index.html')
 
 @login_required
 def profile(request, username):
@@ -105,10 +103,6 @@ def search(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request,'search.html',{'context':page_obj})
-
-@login_required
-def notification(request):
-    return render(request,'notification.html')
 
 @login_required
 def autocomplete(request):
