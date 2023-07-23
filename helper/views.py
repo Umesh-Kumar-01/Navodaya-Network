@@ -31,6 +31,7 @@ def helper(request):
             expire_time = new_request.EXPIRATION_PERIODS.get(new_request.request_type,'N')
             
             new_request.deletion_at = new_request.created_at + timedelta(days=expire_time)
+            new_request.subscribers.add(request.user)
             new_request.save()
             messages.success(request,"Request Submitted Successfully!") # New Message needs to implement
         

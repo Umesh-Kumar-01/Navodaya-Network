@@ -11,7 +11,7 @@ Notifications
       <div class="text-center mt-3">
         <h1>Notifications</h1>
       </div>
-
+      
       <div class="text-center mt-3">
         <div class="row justify-content-center">
           <div class="col-auto">
@@ -22,11 +22,14 @@ Notifications
           </div>
         </div>
       </div>      
-
+      
       <div class="notification-list mt-4">
         {% for notification in notifications %}
         <div class="notification {% if not notification.read %}unread{% else %}read d-none{% endif %} card mb-2">
           <div class="card-body">
+            {% if notification.notify_url %}
+            <a class="text-decoration-none" href="{{ notification.notify_url }}">
+            {% endif %}
             <p class="notification-time text-muted">
               {% if notification.timestamp %}
               {{ notification.timestamp }}
@@ -36,6 +39,9 @@ Notifications
             </p>
             <p>{{ notification.message }}</p>
           </div>
+          {% if notification.notify_url %}
+          </a>
+          {% endif %}
           <div class="card-footer">
             {% if not notification.broadcast_on %}
             <div class="notification-actions">
@@ -50,9 +56,6 @@ Notifications
                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
               </form>
             </div>
-            {% endif %}
-            {% if notification.notify_url %}
-            <a href="{{ notification.notify_url }}" class="stretched-link"></a>
             {% endif %}
           </div>
         </div>

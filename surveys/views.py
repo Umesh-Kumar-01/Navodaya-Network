@@ -5,6 +5,8 @@ from .models import Survey
 from .forms import SurveyForm
 from django.contrib import messages
 from django.http import HttpResponseForbidden
+from notifications_app.models import Notification
+from django.urls import reverse
 
 
 @login_required
@@ -33,7 +35,8 @@ def survey_list(request):
             survey.creator = request.user
             survey.save()
             form.save_m2m()  # Save the many-to-many relationship
-            messages.success(request, "Survey uploaded successfully!")
+            message = f"New survey '{survey.heading}' created successfully!"
+            messages.success(request, message)
             return redirect('survey_list')
         else:
             messages.error(request, "Form is invalid! Please check the form once. Only Google Form and SurveyMonkey links allowed.")
@@ -60,6 +63,10 @@ def survey_detail(request, pk):
             messages.warning(request, "You have already filled the survey!")
         else:
             survey.respondents.add(response_user)
+            message = f"User {response_user} has filled your Survey!"
+            notify_url = request.build_absolute_uri(reverse('survey_detail', args=[survey.id]))  # Get the survey URL
+            notification = Notification(user=survey.creator, message=message, notify_url=notify_url)
+            notification.save()
             messages.success(request, "Response has been recorded!")
 
     return render(request, 'surveys/survey_detail.html', {'survey': survey})

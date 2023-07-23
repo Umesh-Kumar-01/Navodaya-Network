@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.urls import reverse
+from .tasks import create_comment_notification_task
 
 class Request(models.Model):
     URGENT = 'U'
@@ -58,3 +62,21 @@ class Comment(models.Model):
     email = models.EmailField(null=True,blank=True)
     def __str__(self):
         return f"Comment {self.id} - {self.request_id}"
+
+@receiver(post_save, sender=Comment)
+def create_comment_notification(sender, instance, created, **kwargs):
+    if created:
+        message = f"New Comment on Request {instance.request_id}: {instance.created_by.username} added a comment!"
+        notify_link = reverse('view_request', args=[instance.request_id])
+        # print(message)
+        subscribers = instance.request.subscribers.all()
+        subscribers_data = [{'id': subscriber.id, 'username': subscriber.username} for subscriber in subscribers]
+        if subscribers_data:
+            # print("No subscribers!")
+            create_comment_notification_task.delay(
+                message,
+                notify_link,
+                subscribers_data,
+            )
+    else:
+        print("not_created")
