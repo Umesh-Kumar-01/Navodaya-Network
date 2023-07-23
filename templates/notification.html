@@ -6,21 +6,78 @@ Notifications
 
 {% block content %}
 <div class="container">
-  <h1>Notifications</h1>
-  <div class="notification-list">
-    <div class="notification">
-      <h3>Notification 1</h3>
-      <p>This is the content of the first notification.</p>
-    </div>
-    <div class="notification">
-      <h3>Notification 2</h3>
-      <p>This is the content of the second notification.</p>
-    </div>
-    <div class="notification">
-      <h3>Notification 3</h3>
-      <p>This is the content of the third notification.</p>
+  <div class="row">
+    <div class="col-lg-8 offset-lg-2">
+      <div class="text-center mt-3">
+        <h1>Notifications</h1>
+      </div>
+
+      <div class="text-center mt-3">
+        <div class="row justify-content-center">
+          <div class="col-auto">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="toggleSwitch" checked>
+              <label class="form-check-label" for="toggleSwitch">Unread Notifications</label>
+            </div>
+          </div>
+        </div>
+      </div>      
+
+      <div class="notification-list mt-4">
+        {% for notification in notifications %}
+        <div class="notification {% if not notification.read %}unread{% else %}read d-none{% endif %} card mb-2">
+          <div class="card-body">
+            <p class="notification-time text-muted">
+              {% if notification.timestamp %}
+              {{ notification.timestamp }}
+              {% else %}
+              {{ notification.broadcast_on }}
+              {% endif %}
+            </p>
+            <p>{{ notification.message }}</p>
+          </div>
+          <div class="card-footer">
+            {% if not notification.broadcast_on %}
+            <div class="notification-actions">
+              {% if not notification.read %}
+              <form action="{% url 'mark_as_read' notification.id %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-sm">Mark as Read</button>
+              </form>
+              {% endif %}
+              <form action="{% url 'delete_notification' notification.id %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+            </div>
+            {% endif %}
+            {% if notification.notify_url %}
+            <a href="{{ notification.notify_url }}" class="stretched-link"></a>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>
-{% endblock content %}
 
+<script>
+  const toggleSwitch = document.getElementById('toggleSwitch');
+  const unreadNotificationList = document.querySelectorAll('.notification.unread');
+  const readNotificationList = document.querySelectorAll('.notification.read');
+
+  toggleSwitch.addEventListener('change', function () {
+    if (this.checked) {
+      // Show unread notifications
+      unreadNotificationList.forEach(row => row.classList.remove('d-none'));
+      readNotificationList.forEach(row => row.classList.add('d-none'));
+    } else {
+      // Show read notifications
+      unreadNotificationList.forEach(row => row.classList.add('d-none'));
+      readNotificationList.forEach(row => row.classList.remove('d-none'));
+    }
+  });
+</script>
+
+{% endblock content %}

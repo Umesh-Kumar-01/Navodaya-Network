@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator, MaxLengthValidator, FileExtensionValidator
 from mysite.constants import JNV_MAP_LIST, STATES
 from django.contrib.auth.models import User
+from notifications_app.models import Notification, BroadcastNotification
 
 # Create your models here.
 class UserCard(models.Model):
@@ -55,6 +56,28 @@ class UserPrivateInfo(models.Model):
     current_location_state = models.CharField(max_length=40,choices =[(x,x) for x in STATES],blank=True,null=True)
     current_location_zip = models.PositiveIntegerField(blank=True,null=True)
     profession = models.CharField(max_length=60,blank=True,null=True)
+    
+    @property
+    def unread_notification(self):
+        # Get unread notifications for the specific user
+        unread_notifications = Notification.objects.filter(user=self.user, read=False)[:5]
+        
+        # Get broadcast notifications
+        broadcast_notifications = BroadcastNotification.objects.all()[:5]
+        
+        # Combine the two sets of notifications
+        all_notifications = list(unread_notifications) + list(broadcast_notifications)
+        
+        # Sort the combined notifications by timestamp
+        all_notifications.sort(key=lambda notification: notification.timestamp if isinstance(notification, Notification) else notification.broadcast_on, reverse=True)
+        
+        # Get the count of unread notifications
+        unread_count = Notification.objects.filter(user=self.user, read=False).count()
+        
+        return {
+            'count': unread_count,
+            'notifications': all_notifications
+        }
     
     def __str__(self) -> str:
         return "Private Data User:"+self.user.username

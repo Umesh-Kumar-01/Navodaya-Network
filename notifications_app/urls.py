@@ -19,5 +19,8 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.test, name="tester"),
+    path('test', views.test, name="tester"),
+    path('', views.notifications, name='notification'),
+    path('mark_as_read/<int:notification_id>/', views.mark_as_read, name='mark_as_read'),
+    path('delete_notification/<int:notification_id>/', views.delete_notification, name='delete_notification'),
 ]
