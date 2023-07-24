@@ -95,14 +95,14 @@ def delete_request(request, request_id):
     help_request = get_object_or_404(Request, help_id=request_id)
 
     if help_request.created_by == request.user:
-        if request.is_closed:
-            messages.warning('Request is already Closed! You can not delete Now.')
+        if help_request.is_closed:
+            messages.warning(request,'Request is already Closed! You can not delete Now.')
         else:
             help_request.delete()
-            messages.success('Request is deleted successfully!')  # Redirect to the list of requests after successful deletion
+            messages.success(request,'Request is deleted successfully!')  # Redirect to the list of requests after successful deletion
     else:
         # Handle unauthorized deletion attempt (e.g., show an error message)
-        messages.error("UnAuthorised Deletion Request!")
+        messages.error(request,"UnAuthorised Deletion Request!")
     return redirect('helper')
 
 @login_required

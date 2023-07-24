@@ -9,5 +9,6 @@ urlpatterns = [
     path('signup/',views.signup,name='signup'),
     path('search/',views.search,name='search'),
     path('autocomplete/',views.autocomplete,name='autocomplete'),
+    path('terms_and_conditions/',views.terms,name='terms'),
     path('',RedirectView.as_view(url='home/'))
 ]

@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.contrib import messages
+import json
 
 # Create your views here.
 def index(request):
@@ -69,7 +70,9 @@ def signup(request):
         #     return HttpResponse("There is an Error!")
     else:
         form = SignUpForm()
-    return render(request, 'signup.html', {'form': form})
+    
+    json_jnv_list = json.dumps(JNV_MAP_LIST)
+    return render(request, 'signup.html', {'form': form,'jnv_data_json':json_jnv_list})
 
 @login_required
 def search(request):
@@ -111,3 +114,6 @@ def autocomplete(request):
     results = list(users)
     print(results)
     return JsonResponse(results,safe=False)
+
+def terms(request):
+    return render(request,'terms.html')

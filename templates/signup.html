@@ -21,8 +21,8 @@ Welcome to Family
           <div class="row">
 
             <div class="col-md-4 mb-3">
-              <label for="{{ form.first_name.id }}">{{ form.first_name.label }}</label>
-              <input type="text" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" id="{{ form.first_name.id }}" placeholder="{{ form.first_name.label }}" name="{{ form.first_name.html_name }}" required>
+              <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+              <input type="text" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" id="{{ form.first_name.id_for_label }}" placeholder="{{ form.first_name.label }}" name="{{ form.first_name.html_name }}" required>
               {% if form.first_name.errors %}
                   <div class="invalid-feedback">
                       {% for error in form.first_name.errors %}
@@ -36,8 +36,8 @@ Welcome to Family
               {% endif %}
           </div>          
             <div class="col-md-4 mb-3">
-              <label for="{{ form.last_name.id }}">{{ form.last_name.label }}</label>
-              <input type="text" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" id="{{ form.last_name.id }}" placeholder="{{ form.last_name.label }}" name="{{ form.last_name.html_name }}" required>
+              <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+              <input type="text" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" id="{{ form.last_name.id_for_label }}" placeholder="{{ form.last_name.label }}" name="{{ form.last_name.html_name }}" required>
               {% if form.last_name.errors %}
                   <div class="invalid-feedback">
                       {% for error in form.last_name.errors %}
@@ -51,12 +51,12 @@ Welcome to Family
               {% endif %}
           </div>          
             <div class="col-md-4 mb-3">
-              <label for="{{form.username.id}}">{{form.username.label}}</label>
+              <label for="{{form.username.id_for_label}}">{{form.username.label}}</label>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend">@</span>
                 </div>
-                <input type="text" class="form-control" {% if form.username.errors %}is-invalid {% endif %} id="{{form.username.id}}" name="{{ form.username.html_name }}" placeholder="{{form.username.label}}" aria-describedby="inputGroupPrepend" required>
+                <input type="text" class="form-control" {% if form.username.errors %}is-invalid {% endif %} id="{{form.username.id_for_label}}" name="{{ form.username.html_name }}" placeholder="{{form.username.label}}" aria-describedby="inputGroupPrepend" required>
                 <div class="invalid-feedback">
                   {% for error in form.username.errors %}
                       {{ error }}
@@ -67,8 +67,8 @@ Welcome to Family
           </div>
           <div class="row">
             <div class="col-md-4 mb-3">
-                <label for="{{ form.user_email.id }}">{{ form.user_email.label }}</label>
-                <input type="email" class="form-control {% if form.user_email.errors %}is-invalid{% endif %}" id="{{ form.user_email.id }}" placeholder="{{ form.user_email.label }}" name="{{ form.user_email.html_name }}" required>
+                <label for="{{ form.user_email.id_for_label }}">{{ form.user_email.label }}</label>
+                <input type="email" class="form-control {% if form.user_email.errors %}is-invalid{% endif %}" id="{{ form.user_email.id_for_label }}" placeholder="{{ form.user_email.label }}" name="{{ form.user_email.html_name }}" required>
                   <div class="invalid-feedback">
                     {% if form.user_email.errors %}
                         {% for error in form.user_email.errors %}
@@ -83,8 +83,8 @@ Welcome to Family
                     </div>
             </div>
             <div class="col-md-4 mb-3">
-                <label for="{{ form.password.id }}">{{ form.password.label }}</label>
-                <input type="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}" id="{{ form.password.id }}" placeholder="{{ form.password.label }}" name="{{ form.password.html_name }}" required>
+                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                <input type="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}" id="{{ form.password.id_for_label }}" placeholder="{{ form.password.label }}" name="{{ form.password.html_name }}" required>
                 {% if form.password.errors %}
                     <div class="invalid-feedback">
                         {% for error in form.password.errors %}
@@ -98,8 +98,8 @@ Welcome to Family
                 {% endif %}
             </div>
             <div class="col-md-4 mb-3">
-                <label for="{{ form.confirm_password.id }}">Confirm Password</label>
-                <input type="password" class="form-control {% if form.confirm_password.errors %}is-invalid{% endif %}" id="{{ form.confirm_password.id }}" placeholder="Confirm Password" name="{{ form.confirm_password.html_name }}" required>
+                <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label>
+                <input type="password" class="form-control {% if form.confirm_password.errors %}is-invalid{% endif %}" id="{{ form.confirm_password.id_for_label }}" placeholder="Confirm Password" name="{{ form.confirm_password.html_name }}" required>
                 {% if form.confirm_password.errors %}
                     <div class="invalid-feedback">
                         {% for error in form.confirm_password.errors %}
@@ -116,8 +116,8 @@ Welcome to Family
         
           <div class="row">
             <div class="col-md-4 mb-3">
-              <label for="{{ form.region_name.id }}">{{ form.region_name.label }}</label>
-              <select class="form-control {% if form.region_name.errors %}is-invalid{% endif %}" id="{{ form.region_name.id }}" name="{{ form.region_name.html_name }}" required>
+              <label for="{{ form.region_name.id_for_label }}">{{ form.region_name.label }}</label>
+              <select class="form-control {% if form.region_name.errors %}is-invalid{% endif %}" id="{{ form.region_name.id_for_label }}" name="{{ form.region_name.html_name }}" required>
                   <option value="" selected disabled hidden>Select a region</option>
                   {% for choice in form.region_name.field.choices %}
                       <option value="{{ choice.0 }}">{{ choice.1 }}</option>
@@ -136,12 +136,12 @@ Welcome to Family
               {% endif %}
           </div>
           <div class="col-md-4 mb-3">
-            <label for="{{ form.jnv_name.id }}">JNV</label>
-            <select class="form-control {% if form.jnv_name.errors %}is-invalid{% endif %}" id="{{ form.jnv_name.id }}" name="{{ form.jnv_name.html_name }}" required>
+            <label for="{{ form.jnv_name.id_for_label }}">JNV</label>
+            <select class="form-control {% if form.jnv_name.errors %}is-invalid{% endif %}" id="{{ form.jnv_name.id_for_label }}" name="{{ form.jnv_name.html_name }}" required>
                 <option value="" selected disabled hidden>Select Your Navodaya</option>
-                {% for choice in form.jnv_name.field.choices %}
+                {% comment %} {% for choice in form.jnv_name.field.choices %}
                     <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                {% endfor %}
+                {% endfor %} {% endcomment %}
             </select>
             {% if form.jnv_name.errors %}
                 <div class="invalid-feedback">
@@ -156,8 +156,8 @@ Welcome to Family
             {% endif %}
         </div>
         <div class="col-md-4 mb-3">
-          <label for="{{ form.role.id }}">{{ form.role.label }}</label>
-          <select class="form-control {% if form.role.errors %}is-invalid{% endif %}" id="{{ form.role.id }}" name="{{ form.role.html_name }}" required>
+          <label for="{{ form.role.id_for_label }}">{{ form.role.label }}</label>
+          <select class="form-control {% if form.role.errors %}is-invalid{% endif %}" id="{{ form.role.id_for_label }}" name="{{ form.role.html_name }}" required>
               <option value="" selected disabled hidden>Select a Role</option>
               {% for choice in form.role.field.choices %}
                   <option value="{{ choice.0 }}">{{ choice.1 }}</option>
@@ -180,8 +180,8 @@ Welcome to Family
             <br>
           <h6>Alumini and Students have to fill Passing Year and Others have to fill Joining Year</h6>
           <div class="col-md-4 mb-3 toolip" title="Passing Year for Students and Alumini Roles and Joining Year for other Roles.">
-            <label for="{{ form.year.id }}">Year</label>
-            <input type="number" class="form-control {% if form.year.errors %}is-invalid{% endif %}" id="{{ form.year.id }}" placeholder="Year" name="{{ form.year.html_name }}" required>
+            <label for="{{ form.year.id_for_label }}">Year</label>
+            <input type="number" class="form-control {% if form.year.errors %}is-invalid{% endif %}" id="{{ form.year.id_for_label }}" placeholder="Year" name="{{ form.year.html_name }}" required>
             {% if form.year.errors %}
                 <div class="invalid-feedback">
                     {% for error in form.year.errors %}
@@ -194,6 +194,11 @@ Welcome to Family
                 </div>
             {% endif %}
         </div>
+        <div class = "row">
+            <br>
+          <h6 class="text-muted">Above Information will be displayed on profile page and will be visible to all users.</h6>
+        </div>
+
             <br><br>
           </div>
           <div class = "row">
@@ -202,8 +207,8 @@ Welcome to Family
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label for="{{ form.current_location_city.id }}">City</label>
-              <input type="text" class="form-control {% if form.current_location_city.errors %}is-invalid{% endif %}" id="{{ form.current_location_city.id }}" placeholder="Enter Current City" name="{{ form.current_location_city.html_name }}">
+              <label for="{{ form.current_location_city.id_for_label }}">City</label>
+              <input type="text" class="form-control {% if form.current_location_city.errors %}is-invalid{% endif %}" id="{{ form.current_location_city.id_for_label }}" placeholder="Enter Current City" name="{{ form.current_location_city.html_name }}">
               {% if form.current_location_city.errors %}
                   <div class="invalid-feedback">
                       {% for error in form.current_location_city.errors %}
@@ -217,8 +222,8 @@ Welcome to Family
               {% endif %}
           </div>  
             <div class="col-md-3 mb-3">
-              <label for="{{ form.current_location_state.id }}">State</label>
-              <select class="form-control {% if form.current_location_state.errors %}is-invalid{% endif %}" id="{{ form.current_location_state.id }}" name="{{ form.current_location_state.html_name }}">
+              <label for="{{ form.current_location_state.id_for_label }}">State</label>
+              <select class="form-control {% if form.current_location_state.errors %}is-invalid{% endif %}" id="{{ form.current_location_state.id_for_label }}" name="{{ form.current_location_state.html_name }}">
                   <option value="" selected disabled hidden>Select State</option>
                   {% for choice in form.current_location_state.field.choices %}
                       <option value="{{ choice.0 }}">{{ choice.1 }}</option>
@@ -237,8 +242,8 @@ Welcome to Family
               {% endif %}
           </div>
           <div class="col-md-3 mb-3">
-            <label for="{{ form.current_location_zip.id }}">Zip</label>
-            <input type="number" class="form-control {% if form.current_location_zip.errors %}is-invalid{% endif %}" id="{{ form.current_location_zip.id }}" placeholder="Zip" name="{{ form.current_location_zip.html_name }}">
+            <label for="{{ form.current_location_zip.id_for_label }}">Zip</label>
+            <input type="number" class="form-control {% if form.current_location_zip.errors %}is-invalid{% endif %}" id="{{ form.current_location_zip.id_for_label }}" placeholder="Zip" name="{{ form.current_location_zip.html_name }}">
             {% if form.current_location_zip.errors %}
                 <div class="invalid-feedback">
                     {% for error in form.current_location_zip.errors %}
@@ -254,8 +259,8 @@ Welcome to Family
           </div>
           <div class ="row">
             <div class="col-md-6 mb-3">
-              <label for="{{ form.profession.id }}">Profession</label>
-              <input type="text" class="form-control {% if form.profession.errors %}is-invalid{% endif %}" id="{{ form.profession.id }}" placeholder="Profession Name" name="{{ form.profession.html_name }}">
+              <label for="{{ form.profession.id_for_label }}">Profession</label>
+              <input type="text" class="form-control {% if form.profession.errors %}is-invalid{% endif %}" id="{{ form.profession.id_for_label }}" placeholder="Profession Name" name="{{ form.profession.html_name }}">
               {% if form.profession.errors %}
                   <div class="invalid-feedback">
                       {% for error in form.profession.errors %}
@@ -273,7 +278,7 @@ Welcome to Family
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
               <label class="form-check-label" for="invalidCheck">
-                Agree to terms and conditions
+                Agree to <a href="{% url 'terms' %}" target="_blank">terms and conditions</a>
               </label>
               <div class="invalid-feedback">
                 You must agree before submitting.
@@ -286,15 +291,14 @@ Welcome to Family
     </div>
   </div> 
   <script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function() {
+    (function () {
       'use strict';
-      window.addEventListener('load', function() {
+      window.addEventListener('load', function () {
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
         var forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
-        var validation = Array.prototype.filter.call(forms, function(form) {
-          form.addEventListener('submit', function(event) {
+        var validation = Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener('submit', function (event) {
             if (form.checkValidity() === false) {
               event.preventDefault();
               event.stopPropagation();
@@ -304,5 +308,32 @@ Welcome to Family
         });
       }, false);
     })();
-    </script>
+  
+    const jnvData = JSON.parse('{{ jnv_data_json|safe }}');
+    const regionSelect = document.getElementById("{{ form.region_name.id_for_label }}");
+    const jnvSelect = document.getElementById("{{ form.jnv_name.id_for_label }}");
+    console.log(jnvData);
+    console.log(regionSelect);
+    console.log(jnvSelect);
+    
+    function updateJNVNames() {
+      const selectedRegion = regionSelect.value;
+      jnvSelect.innerHTML = '';
+  
+      const jnvNames = jnvData[selectedRegion];
+      console.log(selectedRegion);
+      console.log(jnvNames);
+  
+      jnvNames.forEach((jnv) => {
+        const option = document.createElement('option');
+        option.value = jnv;
+        option.text = "Jawahar Navodaya Vidyalaya, " + jnv;
+        jnvSelect.appendChild(option);
+      });
+    }
+  
+    // Add the event listener outside the updateJNVNames function
+    regionSelect.addEventListener('change', updateJNVNames);
+  </script>
+  
 {% endblock %}
