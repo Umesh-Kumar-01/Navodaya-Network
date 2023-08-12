@@ -27,6 +27,7 @@ def profile(request, username):
     is_own_profile = request.user == user
 
     context = {
+        'user':user,
         'user_card': user_card,
         'user_private_info': user_private_info,
         'is_own_profile': is_own_profile,

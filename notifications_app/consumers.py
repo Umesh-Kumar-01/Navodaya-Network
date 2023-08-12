@@ -1,6 +1,5 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.contrib.auth.models import AnonymousUser
 
 class NotificationConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -46,6 +45,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 class UserNotificationConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         user = self.scope.get('user')
+        from django.contrib.auth.models import AnonymousUser
         if not isinstance(user, AnonymousUser):
             self.user_id = user.id
             self.group_name = f"user_{self.user_id}"
