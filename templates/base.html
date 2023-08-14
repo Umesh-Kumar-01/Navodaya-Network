@@ -43,6 +43,9 @@ title: title of the base file
           <li class="nav-item">
             <a class="nav-link" href="{% url 'survey_list' %}">Surveys</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'verify' %}">Verification</a>
+          </li>
         </ul>
         {% if user.is_authenticated %}
         <ul class="navbar-nav">

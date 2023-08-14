@@ -26,6 +26,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('surveys/', include('surveys.urls')),
     path("notify/",include('notifications_app.urls')),
+    path("verify/", include('verification_app.urls')),
     path('',include('Users.urls')),
 ]
 

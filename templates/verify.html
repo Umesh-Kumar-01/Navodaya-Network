@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Email Verification{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow mx-auto" style="max-width: 600px;">
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <h4 class="card-title">User Verification</h4>
+                <p class="card-text"><strong>Status: {% if verification.is_verified_email %}Verified{% else %}Not Verified{% endif %}</strong></p>
+            </div>
+
+            <!-- Step One: Verify Email -->
+            <div class="mb-4">
+                <h5>Step 1: Email Verification</h5>
+                {% if not verification.is_verified_email %}
+                <p>An Email has been sent on your registered email ID for verification.</p>
+                <p><a href={% url 'send_verification_link' %}>Resend Email</a></p>
+                <p><strong>Email Status: </strong> <span style="color:red;"> Not Verified </span> </p>
+                {% else %}
+                <p style="color:green;">Your email is already verified.</p>
+                {% endif %}
+            </div>
+
+            <hr class="my-4">
+
+            <!-- Step Two: Role Verification -->
+            <div class="mb-4">
+                <h5>Step 2: JNV Verification</h5>
+                {% if not verification.is_verified_by_poc %}
+                <p><strong>JNV Verification Status: </strong> <span style="color:red;">Not Verified </span> </p>
+                {% if verification.is_verified_email %}
+                <p>After email verification, you can send a verification request to your Point of Contact (POC):</p>
+                <form method="POST">
+                {% csrf_token %}
+                <button class="btn btn-primary submit">Send Verify Request to POC</button>
+                </form>
+                <br>
+                {% comment %} <a href="{% url 'find_poc' %}">Who is my POC?</a> {% endcomment %}
+                {% else %}
+                <p>Complete email verification to proceed to the next step.</p>
+                {% endif %}
+                {% else %}
+                <p style="color:green;">Your JNV is already verified.</p>
+                {% endif %}
+            </div>
+
+            <!-- Apply for POC -->
+            <div class="text-center">
+                <p>Interested in becoming a Point of Contact (POC)? <a href="{% url 'apply_poc' %}" class="btn btn-success">Apply for POC</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

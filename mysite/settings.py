@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from django.contrib.messages import constants as messages
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     'Users.apps.UsersConfig',
     'helper.apps.HelperConfig',
     'notifications_app.apps.NotificationsAppConfig',
+    'verification_app.apps.VerificationAppConfig',
     'surveys.apps.SurveysConfig',
     'django_celery_beat',
     'django_celery_results',
@@ -141,7 +146,13 @@ STATICFILES_DIRS = [
 ]
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',

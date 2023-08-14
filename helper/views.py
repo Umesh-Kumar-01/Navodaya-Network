@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from functools import wraps
+from Users.decorators import verified_user_required
 
 
 def get_filtered_requests(user):
@@ -18,6 +19,7 @@ def get_filtered_requests(user):
     return context
     
 @login_required
+@verified_user_required
 def helper(request):
     context = get_filtered_requests(request.user)
     # for x,y in context.items():

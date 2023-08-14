@@ -11,6 +11,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.contrib import messages
 import json
+from .decorators import verified_user_required
 
 # Create your views here.
 def index(request):
@@ -67,8 +68,6 @@ def signup(request):
             for field_name, errors in form.errors.items():
                 for error in errors:
                     messages.error(request,f"{field_name}: {error}")
-            return render(request, 'your_template.html', {'form': form})
-        #     return HttpResponse("There is an Error!")
     else:
         form = SignUpForm()
     
@@ -76,6 +75,7 @@ def signup(request):
     return render(request, 'signup.html', {'form': form,'jnv_data_json':json_jnv_list})
 
 @login_required
+@verified_user_required
 def search(request):
     fname = request.GET.get('fname')
     lname = request.GET.get('lname')
@@ -109,6 +109,7 @@ def search(request):
     return render(request,'search.html',{'context':page_obj})
 
 @login_required
+@verified_user_required
 def autocomplete(request):
     user_name = request.GET.get('input','')
     users = User.objects.filter(username__icontains = user_name).values_list('username',flat=True)

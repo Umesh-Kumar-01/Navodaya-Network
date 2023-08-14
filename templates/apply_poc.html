@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Point of Contact (POC) Application{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow mx-auto" style="max-width: 600px;">
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <h4 class="card-title">Point of Contact (POC) Application</h4>
+            </div>
+
+            <!-- POC Application Form -->
+            <div class="mb-4">
+                <h5>Apply for Point of Contact (POC)</h5>
+                <p>Upload documents which verify your JNV:</p>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="documents">Documents (TC, marksheet, character certificate, etc.):</label>
+                        <input type="file" class="form-control" id="documents" name="documents" required>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Submit Application</button>
+                </form>
+            </div>
+
+            <!-- Responsibilities -->
+            <div class="mb-4">
+                <h5>Your Responsibilities as POC</h5>
+                <p>By applying for POC, you agree to:</p>
+                <ul>
+                    <li>Have the power to add your batchmates to the website.</li>
+                    <li>Be the admin of your batch group and represent your batch on the website.</li>
+                </ul>
+            </div>
+
+            <!-- Note -->
+            <div class="mb-4">
+                <h5>Note</h5>
+                <p>This is not an official website. We are collecting your documents to verify that you are a Navodayan.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
