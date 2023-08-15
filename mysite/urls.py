@@ -27,6 +27,8 @@ urlpatterns = [
     path('surveys/', include('surveys.urls')),
     path("notify/",include('notifications_app.urls')),
     path("verify/", include('verification_app.urls')),
+    path('announcements/', include('announcements.urls')),
+
     path('',include('Users.urls')),
 ]
 

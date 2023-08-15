@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'helper.apps.HelperConfig',
     'notifications_app.apps.NotificationsAppConfig',
     'verification_app.apps.VerificationAppConfig',
+    'announcements.apps.AnnouncementsConfig',
     'surveys.apps.SurveysConfig',
     'django_celery_beat',
     'django_celery_results',

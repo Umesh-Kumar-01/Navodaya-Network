@@ -100,7 +100,7 @@ Request {{ request_id }}
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          {% if comment.created_by.username == help.created_by.username %}
+                          {% if request.user.username == help.created_by.username or request.user.username == comment.created_by.username %}
                           <p>User: {{ comment.created_by.first_name }} {{ comment.created_by.last_name }}</p>
                           {% if comment.mobile_number %}
                           <p>Shared contact details: {{ comment.mobile_number }}</p>
