@@ -1,4 +1,3 @@
-<!-- myhomepage.html -->
 {% extends 'base.html' %}
 
 {% block title %}Navodaya Network - Home{% endblock %}
@@ -6,15 +5,17 @@
 {% block content %}
 <!-- Add your homepage content here -->
 
-<section class="hero">
+<section class="hero bg-primary text-light text-center py-5">
   <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <h1>Welcome to Navodaya Network</h1>
-        <p>Connect, collaborate, and grow with fellow Navodayans.</p>
-        <a href="#" class="btn btn-primary">Get Started</a>
-      </div>
-    </div>
+    <h1 class="display-4 mb-3">
+      Welcome to 
+      <span class="glassy-text">
+        <span id="changingText" class="changing-text"></span>
+        <span id="cursor" class="cursor">|</span>
+      </span>
+    </h1>
+    <p class="lead">Connect, collaborate, and grow with fellow Navodayans.</p>
+    <a href="{% url 'helper' %}" class="btn btn-light btn-lg">Get Started</a>
   </div>
 </section>
 
@@ -23,23 +24,60 @@
     <h2 class="text-center mb-5">Why Choose Navodaya Network?</h2>
     <div class="row">
       <div class="col-md-4">
-        <i class="fas fa-search fa-3x mb-3"></i>
+        <i class="fas fa-search fa-3x mb-3 text-primary"></i>
         <h3 class="h5">Discover</h3>
         <p>Find and connect with Navodayans from all over the world. Search based on batches, professions, interests, and more.</p>
       </div>
       <div class="col-md-4">
-        <i class="fas fa-comments fa-3x mb-3"></i>
+        <i class="fas fa-comments fa-3x mb-3 text-primary"></i>
         <h3 class="h5">Collaborate</h3>
         <p>Engage in discussions, share knowledge, and collaborate with your Navodaya community through chat, groups, and forums.</p>
       </div>
       <div class="col-md-4">
-        <i class="fas fa-lightbulb fa-3x mb-3"></i>
+        <i class="fas fa-lightbulb fa-3x mb-3 text-primary"></i>
         <h3 class="h5">Grow</h3>
         <p>Unlock opportunities for personal and professional growth. Seek mentorship, find job openings, and explore new horizons.</p>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  .cursor {
+    animation: blink 0.7s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+</style>
+
+<script>
+  const changingTextElement = document.getElementById('changingText');
+  const cursorElement = document.getElementById('cursor');
+  const textArray = ['Navodaya Network', 'Navodaya Family']; // Add more words if needed
+  let currentIndex = 0;
+  let currentWord = '';
+  let currentLetterIndex = 0;
+
+  function updateText() {
+    if (currentLetterIndex < currentWord.length) {
+      changingTextElement.textContent = currentWord.substring(0, currentLetterIndex + 1);
+      currentLetterIndex++;
+      setTimeout(updateText, 150);
+    } else {
+      changingTextElement.textContent = currentWord;
+      currentLetterIndex = 0;
+      currentIndex = (currentIndex + 1) % textArray.length;
+      currentWord = textArray[currentIndex];
+      setTimeout(updateText, 1500);
+    }
+  }
+
+  currentWord = textArray[currentIndex];
+  updateText();
+</script>
 
 <!-- Add more sections and content as needed -->
 

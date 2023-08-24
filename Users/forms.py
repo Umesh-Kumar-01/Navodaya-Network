@@ -84,3 +84,17 @@ class SignUpForm(forms.Form):
             current_location_zip =self.cleaned_data['current_location_zip'],
             profession=self.cleaned_data['profession']
         )
+        
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserCard
+        fields = ['profile_photo']
+    
+    def __init__(self, *args, **kwargs):
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+        self.fields['profile_photo'].required = False  # Profile photo is optional
+
+class EditPrivateInfoForm(forms.ModelForm):
+    class Meta:
+        model = UserPrivateInfo
+        fields = ['current_location_city', 'current_location_state', 'current_location_zip', 'profession']

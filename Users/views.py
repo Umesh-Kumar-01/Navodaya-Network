@@ -4,9 +4,10 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import SignUpForm
-from mysite.constants import JNV_MAP_LIST
+from .forms import SignUpForm, EditPrivateInfoForm, EditProfileForm
+from mysite.constants import JNV_MAP_LIST,STATES
 from django.db.models import Q
+from django.db import transaction
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.contrib import messages
@@ -17,7 +18,7 @@ from .decorators import verified_user_required
 def index(request):
     return render(request,'index.html')
 
-@login_required
+@verified_user_required
 def profile(request, username):
     # Get the user's profile details based on the provided username
     user = get_object_or_404(User, username=username)
@@ -35,25 +36,37 @@ def profile(request, username):
     }
     return render(request, 'profile.html', context)
 
-@login_required
+@verified_user_required
 def edit_profile(request):
-    # Get the user's profile details and private info for editing
-    user_card = get_object_or_404(UserCard, user=request.user)
-    user_private_info = get_object_or_404(UserPrivateInfo, user=request.user)
-
+    user_card = UserCard.objects.get(user=request.user)
+    user_private_info = UserPrivateInfo.objects.get(user=request.user)
+    
     if request.method == 'POST':
-        # Process the form data for updating the profile
-        # ... Your form processing logic here ...
-        # For example, you can use Django forms to handle the form data.
-
-        # After updating, redirect to the user's profile page
-        return redirect('profile', username=request.user.username)
-
+        card_form = EditProfileForm(request.POST, request.FILES, instance=user_card)
+        private_info_form = EditPrivateInfoForm(request.POST, instance=user_private_info)
+        
+        if card_form.is_valid() and private_info_form.is_valid():
+            if card_form.has_changed() or private_info_form.has_changed():
+                with transaction.atomic():
+                    if card_form.has_changed():
+                        card_form.save()  # Save the UserCard model instance
+                    if private_info_form.has_changed():
+                        private_info_form.save()  # Save the UserPrivateInfo model instance
+                        messages.success(request,"Profile has been changed successfully.")
+                return redirect('profile', username=request.user.username)
+    else:
+        card_form = EditProfileForm(instance=user_card)
+        private_info_form = EditPrivateInfoForm(instance=user_private_info)
+    
     context = {
+        'user_private_info':user_private_info,
+        'profile_form': card_form,
+        'private_info_form': private_info_form,
         'user_card': user_card,
-        'user_private_info': user_private_info,
+        'STATES':STATES,
     }
     return render(request, 'edit_profile.html', context)
+
 
 def signup(request):
     if request.user.is_authenticated:
@@ -74,7 +87,6 @@ def signup(request):
     json_jnv_list = json.dumps(JNV_MAP_LIST)
     return render(request, 'signup.html', {'form': form,'jnv_data_json':json_jnv_list})
 
-@login_required
 @verified_user_required
 def search(request):
     fname = request.GET.get('fname')

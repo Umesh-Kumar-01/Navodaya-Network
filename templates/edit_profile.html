@@ -13,25 +13,46 @@
                         <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
 
-                            <!-- UserCard Form Fields -->
-                            <div class="mb-3">
-                                <label for="profile_photo">Profile Photo</label>
-                                <input type="file" class="form-control" id="profile_photo" name="profile_photo">
-                                <!-- You can show the current photo as a preview if needed -->
-                                <img src="{{ user_card.profile_photo.url }}" alt="{{ user.username }}" class="img-thumbnail mt-2" style="max-width: 150px;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- UserCard Form Fields -->
+                                    <!-- Profile Photo -->
+                                    <div class="mb-3">
+                                        <label for="profile_photo">Profile Photo</label>
+                                        <input type="file" class="form-control" id="profile_photo" name="profile_photo">
+                                        <img src="{{ user_card.profile_photo.url }}" alt="{{ user.username }}" class="img-thumbnail mt-2" style="max-width: 150px;">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- UserPrivateInfo Form Fields -->
+                                    <!-- Current Location City -->
+                                    <div class="mb-3">
+                                        <label for="current_location_city">Current Location City</label>
+                                        <input type="text" class="form-control" id="current_location_city" name="current_location_city" value="{{ user_private_info.current_location_city }}">
+                                    </div>
+                                    <!-- Current Location State -->
+                                    <div class="mb-3">
+                                        <label for="current_location_state">Current Location State</label>
+                                        <select class="form-select" id="current_location_state" name="current_location_state">
+                                            {% for state in STATES %}
+                                                <option value="{{ state }}" {% if state == user_private_info.current_location_state %}selected{% endif %}>{{ state }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <!-- Current Location Zip -->
+                                    <div class="mb-3">
+                                        <label for="current_location_zip">Current Location Zip</label>
+                                        <input type="number" class="form-control" id="current_location_zip" name="current_location_zip" value="{{ user_private_info.current_location_zip }}">
+                                    </div>
+                                    <!-- Profession -->
+                                    <div class="mb-3">
+                                        <label for="profession">Profession</label>
+                                        <input type="text" class="form-control" id="profession" name="profession" value="{{ user_private_info.profession }}">
+                                    </div>
+                                    <!-- Other UserPrivateInfo Fields -->
+                                    <!-- For example: Current Location State, Zip, Profession, etc. -->
+                                </div>
                             </div>
-
-                            <!-- Other UserCard Fields -->
-                            <!-- For example: Full Name, JNV Name, Region Name, etc. -->
-
-                            <!-- UserPrivateInfo Form Fields -->
-                            <div class="mb-3">
-                                <label for="current_location_city">Current Location City</label>
-                                <input type="text" class="form-control" id="current_location_city" name="current_location_city" value="{{ user_private_info.current_location_city }}">
-                            </div>
-
-                            <!-- Other UserPrivateInfo Fields -->
-                            <!-- For example: Current Location State, Zip, Profession, etc. -->
 
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                             <a href="{% url 'profile' user.username %}" class="btn btn-secondary">Cancel</a>
